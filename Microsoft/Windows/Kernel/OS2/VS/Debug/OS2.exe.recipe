@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Huai\Desktop\嵌入式系統\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe</FullPath>
+      <FullPath>C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

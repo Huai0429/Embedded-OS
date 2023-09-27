@@ -54,12 +54,46 @@ extern "C" {
 #include <os_cfg.h>
 #include <os_cpu.h>
 #include "os_trace.h"
+#include <string.h>
 
 /*
 *********************************************************************************************************
 *                                            MISCELLANEOUS
 *********************************************************************************************************
 */
+
+// Huai
+#define SYSTEM_END_TIME 30
+
+FILE* fp;
+#define INPUT_FILE_NAME "./TaskSet.txt"
+#define OUTPUT_FILE_NAME "./Output.txt"
+#define MAX 20
+#define INFO 4
+
+
+FILE* Output_fp;
+errno_t Output_err;
+// Task Structure
+typedef struct task_para_set {
+    INT16U TaskID;
+    INT16U TaskArriveTime;
+    INT16U TaskExecutionTime;
+    INT16U TaskPeriodic;
+    INT16U TaskNumber;
+    INT16U TaskPriority;
+}task_para_set;
+
+int TASK_NUMBER; //number of input task 
+
+OS_STK** Task_STK;
+task_para_set TaskParameter[OS_MAX_TASKS];
+
+void OutFileInit(void);
+void InputFile(void);
+
+
+// End of Huai
 
 #ifdef   OS_GLOBALS
 #define  OS_EXT

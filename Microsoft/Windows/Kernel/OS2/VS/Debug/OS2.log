@@ -1,16 +1,8 @@
-﻿  os_cpu_c.c
-  os_core.c
-  os_dbg_r.c
-  os_flag.c
-  os_mbox.c
-  os_mem.c
-  os_mutex.c
-  os_q.c
-  os_sem.c
-  os_task.c
-  os_time.c
-  os_tmr.c
-  app_hooks.c
-  main.c
-  Generating Code...
-  OS2.vcxproj -> C:\Users\Huai\Desktop\嵌入式系統\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+﻿  main.c
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(108,16): warning C4013: 'malloc' undefined; assuming extern returning int
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(108,14): warning C4047: '=': 'OS_STK **' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(112,21): warning C4047: '=': 'OS_STK *' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(118,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(128,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(92,17): warning C4101: 'os_err': unreferenced local variable
+  OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

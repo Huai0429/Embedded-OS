@@ -88,6 +88,58 @@
 *********************************************************************************************************
 */
 
+//Huai
+void OutFileInit(void){
+    /*clear the file*/
+    if ((Output_err = fopen_s(&Output_fp, OUTPUT_FILE_NAME, "w")) == 0)
+        fclose(Output_fp);
+    else
+        printf("Error to clear the output file. in void OutFileInit(void)");
+}
+
+void InputFile()
+{
+    /*
+    * Read File
+    * define of task information
+    * Task_ID ArriveTime ExecutionTime Periodic
+    */
+    errno_t err;
+    if ((err = fopen_s(&fp, INPUT_FILE_NAME, "r")) == 0) {
+        printf("Reading TaskSet.txt\n");
+    }
+    else
+    {
+        printf("TaskSet open with error\n");
+    }
+
+    char str[MAX];
+    char* ptr;
+    char* pTmp = NULL;
+    int TaskInfo[INFO], i, j = 0;
+    TASK_NUMBER = 0;
+    while (!feof(fp))
+    {
+        i = 0;
+        memset(str, 0, sizeof(str));
+        fgets(str, sizeof(str) - 1, fp);
+        ptr = strtok_s(str, " ", &pTmp);
+        while (ptr != NULL) {
+            TaskInfo[i] = atoi(ptr);
+            ptr = strtok_s(NULL, " ", &pTmp);
+            /*Read for TaskSet 0:Task_ID 1:ArriveTime 2:ExecutionTime 3:Periodic */
+            if (i == 0) { TASK_NUMBER++; TaskParameter[j].TaskID = TASK_NUMBER; }
+            else if (i == 1) TaskParameter[j].TaskArriveTime = TaskInfo[i];
+            else if (i == 2) TaskParameter[j].TaskExecutionTime = TaskInfo[i];
+            else if (i == 3) TaskParameter[j].TaskPeriodic = TaskInfo[i];
+            i++;
+        }
+        TaskParameter[j].TaskPriority = j;
+        j++;
+    }
+    fclose(fp);
+}
+//End of Huai
 /*
 *********************************************************************************************************
 *********************************************************************************************************

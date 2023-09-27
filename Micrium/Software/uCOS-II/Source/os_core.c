@@ -957,6 +957,13 @@ void  OSTimeTick (void)
     OS_TRACE_TICK_INCREMENT(OSTime);
     OS_EXIT_CRITICAL();
 #endif
+    //Huai
+    // setting end time for OS
+    if (OSTimeGet() > SYSTEM_END_TIME) {
+        OSRunning = OS_FALSE;
+        exit(0);
+    }
+    //End of Huai
     if (OSRunning == OS_TRUE) {
 #if OS_TICK_STEP_EN > 0u
         switch (OSTickStepState) {                         /* Determine whether we need to process a tick  */
