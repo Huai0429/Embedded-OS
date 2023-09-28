@@ -91,6 +91,7 @@ int  main (void)
 #if OS_TASK_NAME_EN > 0u
     CPU_INT08U  os_err;
 #endif
+    cnt1 = cnt2 = 0;
 
 
     CPU_IntInit();
@@ -111,7 +112,7 @@ int  main (void)
     for (n = 0; n < TASK_NUMBER; n++) {
         Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
     }
-
+    
     OSTaskCreateExt(task1,
         &TaskParameter[0],
         &Task_STK[0][TASK_STKSIZE - 1],
@@ -132,28 +133,30 @@ int  main (void)
         &TaskParameter[1],
         (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR)
     );
+    //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
+    printf("Tick\t CurrentTask ID\t NextTask ID\t Number of ctx switches\n");
+    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+        if (TaskParameter[0].TaskPriority < TaskParameter[1].TaskPriority) {
+            printf("%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, next_task_pri+1, cnt1, OSCtxSwCtr);
+            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n",OSTime,1,cnt1, OSCtxSwCtr);
+        }
+        else 
+        {
+            printf("%d \t***********\t task(%2d)(%2d)\t %2d\n", OSTime, 2, cnt2, OSCtxSwCtr);
+            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, next_task_pri+1, cnt2, OSCtxSwCtr);
+        }
+        fclose(Output_fp);
+    }
+    
 
 
 
     //End of Huai
 
-//    OSTaskCreateExt( StartupTask,                               /* Create the startup task                              */
-//                     0,
-//                    &StartupTaskStk[APP_CFG_STARTUP_TASK_STK_SIZE - 1u],
-//                     APP_CFG_STARTUP_TASK_PRIO,
-//                     APP_CFG_STARTUP_TASK_PRIO,
-//                    &StartupTaskStk[0u],
-//                     APP_CFG_STARTUP_TASK_STK_SIZE,
-//                     0u,
-//                    (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
-//
-//#if OS_TASK_NAME_EN > 0u
-//    OSTaskNameSet(         APP_CFG_STARTUP_TASK_PRIO,
-//                  (INT8U *)"Startup Task",
-//                           &os_err);
-//#endif
-    OSStart();                                                  /* Start multitasking (i.e. give control to uC/OS-II)   */
-
+    OSTimeSet(0);
+    OSStart();
+                                                  /* Start multitasking (i.e. give control to uC/OS-II)   */
+    
     while (DEF_ON) {                                            /* Should Never Get Here.                               */
         ;
     }
@@ -165,11 +168,12 @@ static void task1(void* p_arg)
     task_para_set* task_data;
     task_data = p_arg;
     while (1) {
-        printf("Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-            fprintf(Output_fp, "Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
+            printf("%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt1);
+            fprintf(Output_fp, "%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt1);
             fclose(Output_fp);
         }
+        cnt1++;
         OSTimeDly(task_data->TaskPeriodic);
     }
 }
@@ -178,12 +182,12 @@ static void task2(void* p_arg)
     task_para_set* task_data;
     task_data = p_arg;
     while (1) {
-        printf("Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-            fprintf(Output_fp, "Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
+            printf("%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt2);
+            fprintf(Output_fp, "%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt2);
             fclose(Output_fp);
         }
-
+        cnt2++;
         OSTimeDly(task_data->TaskPeriodic);
     }
 }

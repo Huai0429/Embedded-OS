@@ -1,8 +1,8 @@
 ﻿  main.c
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(108,16): warning C4013: 'malloc' undefined; assuming extern returning int
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(108,14): warning C4047: '=': 'OS_STK **' differs in levels of indirection from 'int'
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(112,21): warning C4047: '=': 'OS_STK *' differs in levels of indirection from 'int'
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(118,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(128,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(109,16): warning C4013: 'malloc' undefined; assuming extern returning int
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(109,14): warning C4047: '=': 'OS_STK **' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(113,21): warning C4047: '=': 'OS_STK *' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(119,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(129,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(92,17): warning C4101: 'os_err': unreferenced local variable
   OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

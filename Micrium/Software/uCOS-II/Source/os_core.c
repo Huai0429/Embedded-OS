@@ -697,7 +697,7 @@ void  OSIntExit (void)
 #if OS_CRITICAL_METHOD == 3u                               /* Allocate storage for CPU status register */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-
+    
 
 
     if (OSRunning == OS_TRUE) {
@@ -713,6 +713,30 @@ void  OSIntExit (void)
 #if OS_TASK_PROFILE_EN > 0u
                     OSTCBHighRdy->OSTCBCtxSwCtr++;         /* Inc. # of context switches to this task  */
 #endif
+                    //Huai
+                    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                        if ((OSPrioHighRdy + 1) == 63 && OSPrioCur == 63) {
+                            printf("%d\t task(%2d) \t task(%2d)\t %2d \n", OSTime, OSPrioCur, OSPrioHighRdy, OSCtxSwCtr);
+                            fprintf(Output_fp,"%d\t task(%2d) \t task(%2d)\t %2d \n", OSTime, OSPrioCur, OSPrioHighRdy, OSCtxSwCtr);
+                        }
+                        else if ((OSPrioHighRdy + 1) == 63) {
+                            printf("%d\t task(%2d)(%d) \t task(%2d)\t %2d \n", OSTime, OSPrioCur, OSPrioCur == 1 ? cnt1 : cnt2, OSPrioHighRdy + 1, OSCtxSwCtr);
+                            fprintf(Output_fp,"%d\t task(%2d)(%d) \t task(%2d)\t %2d \n", OSTime, OSPrioCur, OSPrioCur == 1 ? cnt1 : cnt2, OSPrioHighRdy + 1, OSCtxSwCtr);
+                        }
+                        else if (OSPrioCur == 63) {
+                            printf("%d\t task(%2d) \t task(%2d)(%2d)\t %2d \n", OSTime, OSPrioCur, OSPrioHighRdy + 1, (OSPrioHighRdy + 1) == 1 ? cnt1 : cnt2, OSCtxSwCtr);
+                            fprintf(Output_fp, "%d\t task(%2d) \t task(%2d)(%2d)\t %2d \n", OSTime, OSPrioCur, OSPrioHighRdy + 1, (OSPrioHighRdy + 1) == 1 ? cnt1 : cnt2, OSCtxSwCtr);
+                        }   
+                        else {
+                            printf("%d\t task(%2d)(%d) \t task(%2d)(%d)\t %2d \n", OSTime, OSPrioCur, OSPrioCur == 1 ? cnt1 : cnt2, OSPrioHighRdy + 1, (OSPrioHighRdy + 1) == 1 ? cnt1 : cnt2, OSCtxSwCtr);
+                            fprintf(Output_fp, "%d\t task(%2d)(%d) \t task(%2d)(%d)\t %2d \n", OSTime, OSPrioCur, OSPrioCur == 1 ? cnt1 : cnt2, OSPrioHighRdy + 1, (OSPrioHighRdy + 1) == 1 ? cnt1 : cnt2, OSCtxSwCtr);
+                        } 
+                        fclose(Output_fp);
+                    }
+                    
+                    
+                    //End of Huai
+                    
                     OSCtxSwCtr++;                          /* Keep track of the number of ctx switches */
 
 #if OS_TASK_CREATE_EXT_EN > 0u
@@ -732,7 +756,7 @@ void  OSIntExit (void)
         } else {
             OS_TRACE_ISR_EXIT();
         }
-
+        
         OS_EXIT_CRITICAL();
     }
 }
@@ -1002,7 +1026,6 @@ void  OSTimeTick (void)
                     } else {
                         ptcb->OSTCBStatPend = OS_STAT_PEND_OK;
                     }
-
                     if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?       */
                         OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  Make ready          */
                         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
@@ -1140,7 +1163,7 @@ INT8U  OS_EventTaskRdy (OS_EVENT  *pevent,
         ptcb->OSTCBEventPtr       = (OS_EVENT  *)pevent;/* Return event as first multi-pend event ready*/
     }
 #endif
-
+    
     return (prio);
 }
 #endif
@@ -1713,8 +1736,7 @@ void  OS_Sched (void)
     OS_CPU_SR  cpu_sr = 0u;
 #endif
 
-
-
+    
     OS_ENTER_CRITICAL();
     if (OSIntNesting == 0u) {                          /* Schedule only if all ISRs done and ...       */
         if (OSLockNesting == 0u) {                     /* ... scheduler is not locked                  */
@@ -1723,7 +1745,21 @@ void  OS_Sched (void)
             if (OSPrioHighRdy != OSPrioCur) {          /* No Ctx Sw if current task is highest rdy     */
 #if OS_TASK_PROFILE_EN > 0u
                 OSTCBHighRdy->OSTCBCtxSwCtr++;         /* Inc. # of context switches to this task      */
-#endif
+#endif          
+                // Huai
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    if (OSPrioHighRdy == 63) {
+                        printf(" task(%2d) \t %2d \n", OSPrioHighRdy, OSCtxSwCtr);
+                        fprintf(Output_fp, " task(%2d) \t %2d \n", OSPrioHighRdy, OSCtxSwCtr);
+                    }
+                    else {
+                        printf(" task(%2d)(%2d) \t %2d \n", OSPrioHighRdy + 1, OSPrioHighRdy + 1 == 1 ? cnt1 : cnt2, OSCtxSwCtr);
+                        fprintf(Output_fp, " task(%2d)(%2d) \t %2d \n", OSPrioHighRdy + 1, OSPrioHighRdy + 1 == 1 ? cnt1 : cnt2, OSCtxSwCtr);
+                    }
+                    fclose(Output_fp);
+                }
+                
+                //End of Huai
                 OSCtxSwCtr++;                          /* Increment context switch counter             */
 
 #if OS_TASK_CREATE_EXT_EN > 0u
@@ -1731,7 +1767,7 @@ void  OS_Sched (void)
                 OS_TLS_TaskSw();
 #endif
 #endif
-
+                
                 OS_TASK_SW();                          /* Perform a context switch                     */
             }
         }
@@ -1761,7 +1797,7 @@ static  void  OS_SchedNew (void)
 #if OS_LOWEST_PRIO <= 63u                        /* See if we support up to 64 tasks                   */
     INT8U   y;
 
-
+    
     y             = OSUnMapTbl[OSRdyGrp];
     OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
 #else                                            /* We support up to 256 tasks                         */

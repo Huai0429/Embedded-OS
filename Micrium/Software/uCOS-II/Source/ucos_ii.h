@@ -818,7 +818,8 @@ OS_EXT  OS_TMR_WHEEL      OSTmrWheelTbl[OS_TMR_CFG_WHEEL_SIZE];
 
 extern  INT8U   const     OSUnMapTbl[256];          /* Priority->Index    lookup table                 */
 
-
+int next_task_pri;
+int cnt1,cnt2;
 /*
 *********************************************************************************************************
 *                                          FUNCTION PROTOTYPES
