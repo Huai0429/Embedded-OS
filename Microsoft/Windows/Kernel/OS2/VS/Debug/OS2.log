@@ -4,5 +4,9 @@ C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(113,21): warning C4047: '=': 'OS_STK *' differs in levels of indirection from 'int'
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(119,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(129,25): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(141,16): warning C4477: 'printf' : format string '%11x' requires an argument of type 'unsigned int', but variadic argument 2 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(141,16): warning C4477: 'printf' : format string '%6x' requires an argument of type 'unsigned int', but variadic argument 3 has type 'OS_TCB *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(141,16): warning C4477: 'printf' : format string '%6x' requires an argument of type 'unsigned int', but variadic argument 4 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(162,5): warning C4013: 'system' undefined; assuming extern returning int
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(92,17): warning C4101: 'os_err': unreferenced local variable
   OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
