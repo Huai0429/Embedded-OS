@@ -1884,7 +1884,7 @@ void  OS_TaskIdle (void *p_arg)
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-
+    
 
 
     p_arg = p_arg;                               /* Prevent compiler warning for not using 'p_arg'     */
@@ -2049,7 +2049,14 @@ void  OS_TaskStatStkChk (void)
 * Note       : This function is INTERNAL to uC/OS-II and your application should not call it.
 *********************************************************************************************************
 */
-
+//printf("Task[%2d] created, TCB address\t%x\n", TaskParameter[ptcb->OSTCBPrio].TaskID, ptcb->OSTCBStkPtr);
+void Printing_TCB(OS_TCB* p_tcb)
+{
+    printf("------After TCB[%d] begin linked------\n", p_tcb->OSTCBPrio==63? p_tcb->OSTCBPrio: p_tcb->OSTCBPrio+1);
+    printf("Previous TCB point to address\t %x\n", p_tcb->OSTCBPrev);
+    printf("Current  TCB point to address\t %x\n", p_tcb);
+    printf("Next     TCB point to address\t %x\n\n", p_tcb->OSTCBNext);
+}
 INT8U  OS_TCBInit (INT8U    prio,
                    OS_STK  *ptos,
                    OS_STK  *pbos,
@@ -2165,6 +2172,9 @@ INT8U  OS_TCBInit (INT8U    prio,
         OS_ENTER_CRITICAL();
         ptcb->OSTCBNext = OSTCBList;                       /* Link into TCB chain                      */
         ptcb->OSTCBPrev = (OS_TCB *)0;
+
+        OSTCBHead = ptcb;
+
         if (OSTCBList != (OS_TCB *)0) {
             OSTCBList->OSTCBPrev = ptcb;
         }
@@ -2174,6 +2184,7 @@ INT8U  OS_TCBInit (INT8U    prio,
         OSTaskCtr++;                                       /* Increment the #tasks counter             */
         OS_TRACE_TASK_READY(ptcb);
         OS_EXIT_CRITICAL();
+        Printing_TCB(ptcb);
         return (OS_ERR_NONE);
     }
     OS_EXIT_CRITICAL();
