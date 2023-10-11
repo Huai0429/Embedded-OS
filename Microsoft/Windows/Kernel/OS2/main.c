@@ -101,7 +101,7 @@ int  main (void)
     CPU_Init();                                                 /* Initialize the uC/CPU services                       */
 
     OSInit();                                                   /* Initialize uC/OS-II                                  */
-
+    
     //Huai
     OutFileInit();
 
@@ -133,17 +133,26 @@ int  main (void)
         &TaskParameter[1],
         (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR)
     );
+
+    printf("\n================TCB linked list================\n");
+    printf("Task\t Prev_TCB_addr \t TCB_addr\t Next_TCB_addr\n");
+    OS_TCB *head = OSTCBHead;
+    while (head != 0) {
+        printf("%2d\t %11x\t   %6x\t      %6x\t \n", head->OSTCBPrio==63? head->OSTCBPrio:head->OSTCBPrio+1,head->OSTCBPrev,head,head->OSTCBNext);
+        head = head->OSTCBNext;
+    }
     //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
+
     printf("Tick\t CurrentTask ID\t NextTask ID\t Number of ctx switches\n");
     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
         if (TaskParameter[0].TaskPriority < TaskParameter[1].TaskPriority) {
-            printf("%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, next_task_pri+1, cnt1, OSCtxSwCtr);
-            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n",OSTime,1,cnt1, OSCtxSwCtr);
+            printf("%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt1, OSCtxSwCtr);
+            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt1, OSCtxSwCtr);
         }
-        else 
+        else
         {
-            printf("%d \t***********\t task(%2d)(%2d)\t %2d\n", OSTime, 2, cnt2, OSCtxSwCtr);
-            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, next_task_pri+1, cnt2, OSCtxSwCtr);
+            printf("%d \t***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt2, OSCtxSwCtr);
+            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt2, OSCtxSwCtr);
         }
         fclose(Output_fp);
     }
