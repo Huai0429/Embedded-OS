@@ -59,6 +59,7 @@ static  OS_STK  StartupTaskStk[APP_CFG_STARTUP_TASK_STK_SIZE];
 #define TASK_STKSIZE 2048
 static void task1(void* p_arg);
 static void task2(void* p_arg);
+static void task3(void* p_arg);
 
 //End of Huai
 
@@ -85,13 +86,20 @@ static  void  StartupTask (void  *p_arg);
 * Notes       : none
 *********************************************************************************************************
 */
-
+int cmp(task_para_set *TP1, task_para_set *TP2)
+{
+    int x = TP1->TaskExecutionTime;
+    int y = TP2->TaskExecutionTime;
+    //printf("%d %d\n", x, y);
+    if (x > y) return x > y;
+    else if (x == y) return TP1->TaskPriority < TP2->TaskPriority ? 0:1;
+    return x>y;
+}
 int  main (void)
 {
 #if OS_TASK_NAME_EN > 0u
     CPU_INT08U  os_err;
 #endif
-    cnt1 = cnt2 = 0;
 
 
     CPU_IntInit();
@@ -101,18 +109,22 @@ int  main (void)
     CPU_Init();                                                 /* Initialize the uC/CPU services                       */
 
     OSInit();                                                   /* Initialize uC/OS-II                                  */
-
+    
     //Huai
     OutFileInit();
 
     InputFile();
     Task_STK = malloc(TASK_NUMBER * sizeof(int*));
-
+    TaskCtr = calloc(TASK_NUMBER, sizeof(int));
     int n;
     for (n = 0; n < TASK_NUMBER; n++) {
         Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
     }
-    
+    qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
+    for (int i = 0; i < TASK_NUMBER; i++) {
+        printf("%d %d %d %d\n", TaskParameter[i].TaskID, TaskParameter[i].TaskArriveTime, TaskParameter[i].TaskExecutionTime, TaskParameter[i].TaskPeriodic);
+    }
+    /*TaskParameter[0].TaskPriority = 0;
     OSTaskCreateExt(task1,
         &TaskParameter[0],
         &Task_STK[0][TASK_STKSIZE - 1],
@@ -121,8 +133,12 @@ int  main (void)
         &Task_STK[0][0],
         TASK_STKSIZE,
         &TaskParameter[0],
-        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR)
+        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR),
+        TaskParameter[0].TaskExecutionTime,
+        TaskParameter[0].TaskArriveTime,
+        TaskParameter[0].TaskPeriodic
     );
+    TaskParameter[1].TaskPriority = 1;
     OSTaskCreateExt(task2,
         &TaskParameter[1],
         &Task_STK[1][TASK_STKSIZE - 1],
@@ -131,22 +147,52 @@ int  main (void)
         &Task_STK[1][0],
         TASK_STKSIZE,
         &TaskParameter[1],
-        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR)
-    );
+        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR),
+        TaskParameter[1].TaskExecutionTime,
+        TaskParameter[1].TaskArriveTime,
+        TaskParameter[1].TaskPeriodic
+    );*/
+    for (int i = 0; i < TASK_NUMBER; i++) {
+        TaskParameter[i].TaskPriority = i;
+        OSTaskCreateExt(task1,
+            &TaskParameter[i],
+            &Task_STK[i][TASK_STKSIZE - 1],
+            TaskParameter[i].TaskPriority,
+            TaskParameter[i].TaskID,
+            &Task_STK[i][0],
+            TASK_STKSIZE,
+            &TaskParameter[i],
+            (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR),
+            TaskParameter[i].TaskExecutionTime,
+            TaskParameter[i].TaskArriveTime,
+            TaskParameter[i].TaskPeriodic
+        );
+    }
+    
+    
+
+    printf("\n================TCB linked list================\n");
+    printf("Task\t Prev_TCB_addr \t TCB_addr\t Next_TCB_addr\n");
+    OS_TCB *head = OSTCBHead;
+    while (head != 0) {
+        printf("%2d\t %11x\t   %6x\t      %6x\t \n", head->OSTCBPrio==63? head->OSTCBPrio:head->OSTCBPrio+1,head->OSTCBPrev,head,head->OSTCBNext);
+        head = head->OSTCBNext;
+    }
     //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
-    printf("Tick\t CurrentTask ID\t NextTask ID\t Number of ctx switches\n");
-    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+
+    printf("Tick\tEvent\t      CurrentTask ID\tNextTask ID\tResponseTime\tPreemptionTime\t OSTimeDly\n");
+    /*if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
         if (TaskParameter[0].TaskPriority < TaskParameter[1].TaskPriority) {
-            printf("%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, next_task_pri+1, cnt1, OSCtxSwCtr);
-            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n",OSTime,1,cnt1, OSCtxSwCtr);
+            printf("%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt1, OSCtxSwCtr);
+            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt1, OSCtxSwCtr);
         }
-        else 
+        else
         {
-            printf("%d \t***********\t task(%2d)(%2d)\t %2d\n", OSTime, 2, cnt2, OSCtxSwCtr);
-            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, next_task_pri+1, cnt2, OSCtxSwCtr);
+            printf("%d \t***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt2, OSCtxSwCtr);
+            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt2, OSCtxSwCtr);
         }
         fclose(Output_fp);
-    }
+    }*/
     
 
 
@@ -165,9 +211,47 @@ int  main (void)
 //Huai
 static void task1(void* p_arg)
 {
+
     task_para_set* task_data;
     task_data = p_arg;
+    
     while (1) {
+        OSTCBCur->StartTime = OSTimeGet();
+        int temp = OSTimeGet();
+        OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSTCBCur->OSTCBPrio] + 1) * OSTCBCur->PeriodicTime;
+        while (!OSTCBCur->Executed) {
+
+        }
+
+        OSTCBCur->EndTime = OSTimeGet();
+        OSTCBCur->DelayTime = OSTCBCur->NextReadyTime-OSTimeGet();
+        //printf("Delay: %d %d %d\n", OSTimeGet(), OSTCBCur->NextReadyTime, OSTimeGet() - OSTCBCur->NextReadyTime);
+        OSTimeDly(OSTCBCur->NextReadyTime - OSTimeGet());
+    }
+}
+static void task2(void* p_arg)
+{
+    task_para_set* task_data;
+    task_data = p_arg;
+    
+    while (1) {
+        int StartTime = OSTimeGet();
+        while(!OSTCBCur->Executed) { 
+            //printf("break task2\n"); 
+            OSTCBCur->DelayTime = OSTimeGet();
+            //cnt2++;
+            //printf("%2d\t Completion\t task(%2d)(%2d)\t ", OSTimeGet(), task_data->TaskID, cnt2);
+            //printf("%2d\t Completion\n", OSTimeGet());
+            //printf("D2 %d %d %d %d\n", task_data->TaskPeriodic, EndTime, OSTCBCur->NextReadyTime, abs(EndTime - OSTCBCur->NextReadyTime));
+            OSTimeDly(abs(OSTimeGet() - OSTCBCur->NextReadyTime));
+            
+        }
+        //printf("executing task\n");
+        
+    }
+
+    //OSTimeDly(task_data->TaskPeriodic);
+    /*while (1) {
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
             printf("%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt1);
             fprintf(Output_fp, "%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt1);
@@ -175,21 +259,22 @@ static void task1(void* p_arg)
         }
         cnt1++;
         OSTimeDly(task_data->TaskPeriodic);
-    }
+    }*/
+    
 }
-static void task2(void* p_arg)
+static void task3(void* p_arg)
 {
-    task_para_set* task_data;
+    /*task_para_set* task_data;
     task_data = p_arg;
     while (1) {
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-            printf("%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt2);
-            fprintf(Output_fp, "%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID,cnt2);
+            printf("%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID, cnt2);
+            fprintf(Output_fp, "%d\t task(%2d)(%2d)\t", OSTime, task_data->TaskID, cnt2);
             fclose(Output_fp);
         }
         cnt2++;
         OSTimeDly(task_data->TaskPeriodic);
-    }
+    }*/
 }
 //End of Huai
 

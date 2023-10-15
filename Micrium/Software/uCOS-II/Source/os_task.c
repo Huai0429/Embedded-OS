@@ -354,7 +354,10 @@ INT8U  OSTaskCreateExt (void   (*task)(void *p_arg),
                         OS_STK  *pbos,
                         INT32U   stk_size,
                         void    *pext,
-                        INT16U   opt)
+                        INT16U   opt,
+                        INT8U ExeTime,
+                        INT8U ArrTime,
+                        INT8U PerTime)
 {
     OS_STK     *psp;
     INT8U       err;
@@ -391,7 +394,7 @@ INT8U  OSTaskCreateExt (void   (*task)(void *p_arg),
 #endif
 
         psp = OSTaskStkInit(task, p_arg, ptos, opt);           /* Initialize the task's stack          */
-        err = OS_TCBInit(prio, psp, pbos, id, stk_size, pext, opt);
+        err = OS_TCBInit(prio, psp, pbos, id, stk_size, pext, opt, ExeTime, ArrTime, PerTime);
         if (err == OS_ERR_NONE) {
             OS_TRACE_TASK_CREATE(OSTCBPrioTbl[prio]);
             if (OSRunning == OS_TRUE) {                        /* Find HPT if multitasking has started */
