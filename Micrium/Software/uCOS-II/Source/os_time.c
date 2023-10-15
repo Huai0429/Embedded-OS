@@ -52,15 +52,21 @@
 *********************************************************************************************************
 */
 
-void  OSTimeDly (INT32U ticks)
+void  OSTimeDly(INT32U ticks)
 {
     INT8U      y;
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-
-
-
+    // Huai
+    //printf("TimeDly\n");
+    //if (OSTCBCur->ExecutionTime == 0) {
+    //    OSTCBCur->Executed = 1;
+    //    OSTCBCur->ExecutionTime = OSTCBCur->reExecutionTime;
+    //    //OSTCBCur->NextReadyTime += OSTCBCur->PeriodicTime;
+    //    
+    //}
+    // End of Huai
     if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
         return;
     }
@@ -69,12 +75,15 @@ void  OSTimeDly (INT32U ticks)
     }
     if (ticks > 0u) {                            /* 0 means no delay!                                  */
         OS_ENTER_CRITICAL();
-        y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
+        y = OSTCBCur->OSTCBY;        /* Delay current task                                 */
         OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
         OS_TRACE_TASK_SUSPENDED(OSTCBCur);
         if (OSRdyTbl[y] == 0u) {
             OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
         }
+
+        OSTCBCur->Executed = 0;
+
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_TRACE_TASK_DLY(ticks);
         OS_EXIT_CRITICAL();
@@ -110,10 +119,10 @@ void  OSTimeDly (INT32U ticks)
 */
 
 #if OS_TIME_DLY_HMSM_EN > 0u
-INT8U  OSTimeDlyHMSM (INT8U   hours,
-                      INT8U   minutes,
-                      INT8U   seconds,
-                      INT16U  ms)
+INT8U  OSTimeDlyHMSM(INT8U   hours,
+    INT8U   minutes,
+    INT8U   seconds,
+    INT16U  ms)
 {
     INT32U ticks;
 
@@ -144,10 +153,10 @@ INT8U  OSTimeDlyHMSM (INT8U   hours,
         return (OS_ERR_TIME_INVALID_MS);
     }
 #endif
-                                                 /* Compute the total number of clock ticks required.. */
-                                                 /* .. (rounded to the nearest tick)                   */
+    /* Compute the total number of clock ticks required.. */
+    /* .. (rounded to the nearest tick)                   */
     ticks = ((INT32U)hours * 3600uL + (INT32U)minutes * 60uL + (INT32U)seconds) * OS_TICKS_PER_SEC
-          + OS_TICKS_PER_SEC * ((INT32U)ms + 500uL / OS_TICKS_PER_SEC) / 1000uL;
+        + OS_TICKS_PER_SEC * ((INT32U)ms + 500uL / OS_TICKS_PER_SEC) / 1000uL;
     OSTimeDly(ticks);
     return (OS_ERR_NONE);
 }
@@ -174,9 +183,9 @@ INT8U  OSTimeDlyHMSM (INT8U   hours,
 */
 
 #if OS_TIME_DLY_RESUME_EN > 0u
-INT8U  OSTimeDlyResume (INT8U prio)
+INT8U  OSTimeDlyResume(INT8U prio)
 {
-    OS_TCB    *ptcb;
+    OS_TCB* ptcb;
 #if OS_CRITICAL_METHOD == 3u                                   /* Storage for CPU status register      */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
@@ -188,7 +197,7 @@ INT8U  OSTimeDlyResume (INT8U prio)
     }
     OS_ENTER_CRITICAL();
     ptcb = OSTCBPrioTbl[prio];                                 /* Make sure that task exist            */
-    if (ptcb == (OS_TCB *)0) {
+    if (ptcb == (OS_TCB*)0) {
         OS_EXIT_CRITICAL();
         return (OS_ERR_TASK_NOT_EXIST);                        /* The task does not exist              */
     }
@@ -203,18 +212,20 @@ INT8U  OSTimeDlyResume (INT8U prio)
 
     ptcb->OSTCBDly = 0u;                                       /* Clear the time delay                 */
     if ((ptcb->OSTCBStat & OS_STAT_PEND_ANY) != OS_STAT_RDY) {
-        ptcb->OSTCBStat     &= ~OS_STAT_PEND_ANY;              /* Yes, Clear status flag               */
-        ptcb->OSTCBStatPend  =  OS_STAT_PEND_TO;               /* Indicate PEND timeout                */
-    } else {
-        ptcb->OSTCBStatPend  =  OS_STAT_PEND_OK;
+        ptcb->OSTCBStat &= ~OS_STAT_PEND_ANY;              /* Yes, Clear status flag               */
+        ptcb->OSTCBStatPend = OS_STAT_PEND_TO;               /* Indicate PEND timeout                */
+    }
+    else {
+        ptcb->OSTCBStatPend = OS_STAT_PEND_OK;
     }
     if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?                   */
-        OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  Make ready                      */
+        OSRdyGrp |= ptcb->OSTCBBitY;             /* No,  Make ready                      */
         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
         OS_TRACE_TASK_READY(ptcb);
         OS_EXIT_CRITICAL();
         OS_Sched();                                            /* See if this is new highest priority  */
-    } else {
+    }
+    else {
         OS_EXIT_CRITICAL();                                    /* Task may be suspended                */
     }
     return (OS_ERR_NONE);
@@ -236,7 +247,7 @@ INT8U  OSTimeDlyResume (INT8U prio)
 */
 
 #if OS_TIME_GET_SET_EN > 0u
-INT32U  OSTimeGet (void)
+INT32U  OSTimeGet(void)
 {
     INT32U     ticks;
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
@@ -266,7 +277,7 @@ INT32U  OSTimeGet (void)
 */
 
 #if OS_TIME_GET_SET_EN > 0u
-void  OSTimeSet (INT32U ticks)
+void  OSTimeSet(INT32U ticks)
 {
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;

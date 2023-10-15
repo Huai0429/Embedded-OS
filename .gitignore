@@ -1,2 +1,4 @@
 *.opendb
 Microsoft\Windows\Kernel\OS2\VS\.vs\
+/.vs
+/Microsoft/Windows/Kernel/OS2/VS/.vs/OS2
