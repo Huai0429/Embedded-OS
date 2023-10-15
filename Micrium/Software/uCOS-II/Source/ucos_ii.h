@@ -675,6 +675,7 @@ extern "C" {
         INT8U            NextReadyTime;
         INT8U            DelayTime;
         INT8U            Executed;
+        INT8U            MissDeadline;
         INT8U            StartTime;
         INT8U            EndTime;
         INT8U            ResponseTime;

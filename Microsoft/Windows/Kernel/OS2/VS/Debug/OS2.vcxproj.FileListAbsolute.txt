@@ -1,1 +1,1 @@
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel_ori\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

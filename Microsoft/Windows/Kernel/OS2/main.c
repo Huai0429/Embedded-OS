@@ -88,8 +88,10 @@ static  void  StartupTask(void* p_arg);
 */
 int cmp(task_para_set* TP1, task_para_set* TP2)
 {
-    int x = TP1->TaskExecutionTime;
-    int y = TP2->TaskExecutionTime;
+    /*int x = TP1->TaskExecutionTime;
+    int y = TP2->TaskExecutionTime;*/
+    int x = TP1->TaskPeriodic;
+    int y = TP2->TaskPeriodic;
     //printf("%d %d\n", x, y);
     if (x > y) return x > y;
     else if (x == y) return TP1->TaskPriority < TP2->TaskPriority ? 0 : 1;
@@ -180,21 +182,11 @@ int  main(void)
     }
     //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
 
-    printf("Tick\tEvent\t      CurrentTask ID\tNextTask ID\tResponseTime\tPreemptionTime\t OSTimeDly\n");
+    printf("Tick\tEvent\t      CurrentTask ID\tNextTask ID\t  ResponseTime\t  PreemptionTime   OSTimeDly\n");
+
     /*if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-        if (TaskParameter[0].TaskPriority < TaskParameter[1].TaskPriority) {
-            printf("%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt1, OSCtxSwCtr);
-            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt1, OSCtxSwCtr);
-        }
-        else
-        {
-            printf("%d \t***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt2, OSCtxSwCtr);
-            fprintf(Output_fp, "%d \t ***********\t task(%2d)(%2d)\t %2d\n", OSTime, OSPrioHighRdy + 1, cnt2, OSCtxSwCtr);
-        }
         fclose(Output_fp);
     }*/
-
-
 
 
     //End of Huai
@@ -219,7 +211,7 @@ static void task1(void* p_arg)
         OSTCBCur->StartTime = OSTimeGet();
         int temp = OSTimeGet();
         OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSTCBCur->OSTCBPrio] + 1) * OSTCBCur->PeriodicTime;
-        while (!OSTCBCur->Executed) {
+        while (!OSTCBCur->Executed /*|| !OSTCBCur->MissDeadline*/) {
 
         }
 
