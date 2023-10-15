@@ -395,7 +395,7 @@ void  OSTaskDelHook (OS_TCB  *p_tcb)
 
                  TerminateThread(p_stk->ThreadHandle, 0xFFFFFFFF);
                  CloseHandle(p_stk->ThreadHandle);
-
+                 
                  OSTaskTerminate(p_stk);
              }
              break;
@@ -406,7 +406,7 @@ void  OSTaskDelHook (OS_TCB  *p_tcb)
         case STATE_INTERRUPTED:
              TerminateThread(p_stk->ThreadHandle, 0xFFFFFFFF);
              CloseHandle(p_stk->ThreadHandle);
-
+             
              OSTaskTerminate(p_stk);
              break;
 
@@ -918,7 +918,7 @@ void  OSCtxSw (void)
 void  OSIntCtxSw (void)
 {
     OSTaskSwHook();
-
+    //printf("context SW %d %d %d %d\n", OSTimeGet(), OSTCBCur->OSTCBId, OSTCBHighRdy->OSTCBId, OSTCBCur->ExecutionTime);
     OSTCBCur  = OSTCBHighRdy;
     OSPrioCur = OSPrioHighRdy;
 }
@@ -966,7 +966,7 @@ CPU_BOOLEAN  OSIntCurTaskSuspend (void)
         case STATE_TERMINATING:                                         /* Task has terminated (run-to-completion/deleted itself).  */
              TerminateThread(p_stk->ThreadHandle, 0xFFFFFFFF);
              CloseHandle(p_stk->ThreadHandle);
-
+             
              OSTaskTerminate(p_stk);
 
              ret = DEF_TRUE;

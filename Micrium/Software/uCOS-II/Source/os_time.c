@@ -58,9 +58,15 @@ void  OSTimeDly (INT32U ticks)
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-
-
-
+    // Huai
+    //printf("TimeDly\n");
+    //if (OSTCBCur->ExecutionTime == 0) {
+    //    OSTCBCur->Executed = 1;
+    //    OSTCBCur->ExecutionTime = OSTCBCur->reExecutionTime;
+    //    //OSTCBCur->NextReadyTime += OSTCBCur->PeriodicTime;
+    //    
+    //}
+    // End of Huai
     if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
         return;
     }
@@ -75,6 +81,9 @@ void  OSTimeDly (INT32U ticks)
         if (OSRdyTbl[y] == 0u) {
             OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
         }
+
+        OSTCBCur->Executed = 0;
+        
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_TRACE_TASK_DLY(ticks);
         OS_EXIT_CRITICAL();
