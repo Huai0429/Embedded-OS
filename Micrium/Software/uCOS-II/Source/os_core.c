@@ -665,7 +665,7 @@ void  OSInit(void)
 *********************************************************************************************************
 */
 
-void  OSIntEnter (void)
+void  OSIntEnter(void)
 {
     if (OSRunning == OS_TRUE) {
         if (OSIntNesting < 255u) {
@@ -695,7 +695,7 @@ void  OSIntEnter (void)
 *********************************************************************************************************
 */
 
-void  OSIntExit (void)
+void  OSIntExit(void)
 {
 #if OS_CRITICAL_METHOD == 3u                               /* Allocate storage for CPU status register */
     OS_CPU_SR  cpu_sr = 0u;
@@ -712,7 +712,7 @@ void  OSIntExit (void)
             if (OSLockNesting == 0u) {                     /* ... and not locked.                      */
 
                 OS_SchedNew();
-               
+
                 //printf("%d\tOSIntExit() current task: %d\tnext task: %d\n", OSTime, OSTCBPrioTbl[OSPrioCur]->OSTCBId, OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId);
 
                 OSTCBHighRdy = OSTCBPrioTbl[OSPrioHighRdy];
@@ -732,11 +732,11 @@ void  OSIntExit (void)
                             , OSPrioHighRdy);
                     }
                     else {
-                        printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(),OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
+                        printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
                             , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
                     }
 
-                   
+
 #if OS_TASK_PROFILE_EN > 0u
                     OSTCBHighRdy->OSTCBCtxSwCtr++;         /* Inc. # of context switches to this task  */
 #endif
@@ -997,7 +997,7 @@ void  OSTimeTick(void)
         OSRunning = OS_FALSE;
         system("pause");
         exit(0);
-        
+
     }
     OS_TRACE_TICK_INCREMENT(OSTime);
     OS_EXIT_CRITICAL();
@@ -1044,7 +1044,7 @@ void  OSTimeTick(void)
                     //ptcb->OSTCBDeadline = ptcb->OSTCBArrivedTime + (TaskCounterHW[ptcb->OSTCBPrio] + 1) * ptcb->OSTCBPeriodic;
                 }
             }
-            
+
             // printf("task: %d\tarrived time: %d\n", ptcb->OSTCBId, ptcb->OSTCBArrivedTime);
             /* if task arrived, make it ready */
             if (OSTimeGet() == ptcb->ArrivesTime) {
@@ -1427,7 +1427,7 @@ static  void  OS_InitEventList(void)
 #if OS_EVENT_NAME_EN > 0u
         pevent1->OSEventName = (INT8U*)(void*)"?";     /* Unknown name                            */
 #endif
-}
+    }
     pevent1 = &OSEventTbl[ix];
     pevent1->OSEventType = OS_EVENT_TYPE_UNUSED;
     pevent1->OSEventPtr = (OS_EVENT*)0;
@@ -1460,7 +1460,7 @@ static  void  OS_InitEventList(void)
 *********************************************************************************************************
 */
 
-static  void  OS_InitMisc (void)
+static  void  OS_InitMisc(void)
 {
 #if OS_TIME_GET_SET_EN > 0u
     OSTime = 0uL;                       /* Clear the 32-bit system clock            */
@@ -1535,7 +1535,7 @@ static  void  OS_InitRdyList(void)
 *********************************************************************************************************
 */
 
-static  void  OS_InitTaskIdle (void)
+static  void  OS_InitTaskIdle(void)
 {
 #if OS_TASK_NAME_EN > 0u
     INT8U  err;
@@ -1642,7 +1642,7 @@ static  void  OS_InitTaskStat(void)
 #endif
 
 #if OS_TASK_NAME_EN > 0u
-    OSTaskNameSet(OS_TASK_STAT_PRIO, (INT8U *)(void *)"uC/OS-II Stat", &err);
+    OSTaskNameSet(OS_TASK_STAT_PRIO, (INT8U*)(void*)"uC/OS-II Stat", &err);
 #endif
 }
 #endif
@@ -1661,32 +1661,32 @@ static  void  OS_InitTaskStat(void)
 *********************************************************************************************************
 */
 
-static  void  OS_InitTCBList (void)
+static  void  OS_InitTCBList(void)
 {
     INT8U    ix;
     INT8U    ix_next;
-    OS_TCB  *ptcb1;
-    OS_TCB  *ptcb2;
+    OS_TCB* ptcb1;
+    OS_TCB* ptcb2;
 
 
-    OS_MemClr((INT8U *)&OSTCBTbl[0],     sizeof(OSTCBTbl));      /* Clear all the TCBs                 */
-    OS_MemClr((INT8U *)&OSTCBPrioTbl[0], sizeof(OSTCBPrioTbl));  /* Clear the priority table           */
+    OS_MemClr((INT8U*)&OSTCBTbl[0], sizeof(OSTCBTbl));      /* Clear all the TCBs                 */
+    OS_MemClr((INT8U*)&OSTCBPrioTbl[0], sizeof(OSTCBPrioTbl));  /* Clear the priority table           */
     for (ix = 0u; ix < (OS_MAX_TASKS + OS_N_SYS_TASKS - 1u); ix++) {    /* Init. list of free TCBs     */
-        ix_next =  ix + 1u;
-        ptcb1   = &OSTCBTbl[ix];
-        ptcb2   = &OSTCBTbl[ix_next];
+        ix_next = ix + 1u;
+        ptcb1 = &OSTCBTbl[ix];
+        ptcb2 = &OSTCBTbl[ix_next];
         ptcb1->OSTCBNext = ptcb2;
 #if OS_TASK_NAME_EN > 0u
-        ptcb1->OSTCBTaskName = (INT8U *)(void *)"?";             /* Unknown name                       */
+        ptcb1->OSTCBTaskName = (INT8U*)(void*)"?";             /* Unknown name                       */
 #endif
     }
-    ptcb1                   = &OSTCBTbl[ix];
-    ptcb1->OSTCBNext        = (OS_TCB *)0;                       /* Last OS_TCB                        */
+    ptcb1 = &OSTCBTbl[ix];
+    ptcb1->OSTCBNext = (OS_TCB*)0;                       /* Last OS_TCB                        */
 #if OS_TASK_NAME_EN > 0u
-    ptcb1->OSTCBTaskName    = (INT8U *)(void *)"?";              /* Unknown name                       */
+    ptcb1->OSTCBTaskName = (INT8U*)(void*)"?";              /* Unknown name                       */
 #endif
-    OSTCBList               = (OS_TCB *)0;                       /* TCB lists initializations          */
-    OSTCBFreeList           = &OSTCBTbl[0];
+    OSTCBList = (OS_TCB*)0;                       /* TCB lists initializations          */
+    OSTCBFreeList = &OSTCBTbl[0];
 }
 
 
@@ -1710,7 +1710,7 @@ static  void  OS_InitTCBList (void)
 *********************************************************************************************************
 */
 
-void  OS_MemClr (INT8U *pdest,
+void  OS_MemClr(INT8U* pdest,
     INT16U  size)
 {
     while (size > 0u) {
@@ -1744,8 +1744,8 @@ void  OS_MemClr (INT8U *pdest,
 *********************************************************************************************************
 */
 
-void  OS_MemCopy (INT8U  *pdest,
-                  INT8U  *psrc,
+void  OS_MemCopy(INT8U* pdest,
+    INT8U* psrc,
     INT16U  size)
 {
     while (size > 0u) {
@@ -1772,7 +1772,7 @@ void  OS_MemCopy (INT8U  *pdest,
 *********************************************************************************************************
 */
 
-void  OS_Sched (void)
+void  OS_Sched(void)
 {
 #if OS_CRITICAL_METHOD == 3u                           /* Allocate storage for CPU status register     */
     OS_CPU_SR  cpu_sr = 0u;
@@ -1785,7 +1785,7 @@ void  OS_Sched (void)
         if (OSLockNesting == 0u) {                     /* ... scheduler is not locked                  */
 
             OS_SchedNew();
-            
+
             //printf("%d\tOS_Sched() current task: %d\tnext task: %d\n", OSTime, OSTCBPrioTbl[OSPrioCur]->OSTCBId, OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId);
             OSTCBHighRdy = OSTCBPrioTbl[OSPrioHighRdy];
             if (OSTimeGet() > OSTCBPrioTbl[OSPrioCur]->NextReadyTime && OSPrioCur != 63) {
@@ -1852,7 +1852,7 @@ void  OS_Sched (void)
 *********************************************************************************************************
 */
 
-static  void  OS_SchedNew (void)
+static  void  OS_SchedNew(void)
 {
 #if OS_LOWEST_PRIO <= 63u                        /* See if we support up to 64 tasks                   */
 
@@ -1874,13 +1874,15 @@ static  void  OS_SchedNew (void)
 
     if ((OSRdyGrp & 0xFFu) != 0u) {
         y = OSUnMapTbl[OSRdyGrp & 0xFFu];
-    } else {
+    }
+    else {
         y = OSUnMapTbl[(OS_PRIO)(OSRdyGrp >> 8u) & 0xFFu] + 8u;
     }
     ptbl = &OSRdyTbl[y];
     if ((*ptbl & 0xFFu) != 0u) {
         OSPrioHighRdy = (INT8U)((y << 4u) + OSUnMapTbl[(*ptbl & 0xFFu)]);
-    } else {
+    }
+    else {
         OSPrioHighRdy = (INT8U)((y << 4u) + OSUnMapTbl[(OS_PRIO)(*ptbl >> 8u) & 0xFFu] + 8u);
     }
 #endif
@@ -1904,13 +1906,13 @@ static  void  OS_SchedNew (void)
 */
 
 #if (OS_EVENT_NAME_EN > 0u) || (OS_FLAG_NAME_EN > 0u) || (OS_MEM_NAME_EN > 0u) || (OS_TASK_NAME_EN > 0u) || (OS_TMR_CFG_NAME_EN > 0u)
-INT8U  OS_StrLen (INT8U *psrc)
+INT8U  OS_StrLen(INT8U* psrc)
 {
     INT8U  len;
 
 
 #if OS_ARG_CHK_EN > 0u
-    if (psrc == (INT8U *)0) {
+    if (psrc == (INT8U*)0) {
         return (0u);
     }
 #endif
@@ -1946,7 +1948,7 @@ INT8U  OS_StrLen (INT8U *psrc)
 *********************************************************************************************************
 */
 
-void  OS_TaskIdle (void *p_arg)
+void  OS_TaskIdle(void* p_arg)
 {
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
@@ -1987,7 +1989,7 @@ void  OS_TaskIdle (void *p_arg)
 */
 
 #if OS_TASK_STAT_EN > 0u
-void  OS_TaskStat (void *p_arg)
+void  OS_TaskStat(void* p_arg)
 {
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
@@ -2016,9 +2018,9 @@ void  OS_TaskStat (void *p_arg)
     for (;;) {
         OS_ENTER_CRITICAL();
         OSIdleCtrRun = OSIdleCtr;                /* Obtain the of the idle counter for the past second */
-        OSIdleCtr    = 0uL;                      /* Reset the idle counter for the next second         */
+        OSIdleCtr = 0uL;                      /* Reset the idle counter for the next second         */
         OS_EXIT_CRITICAL();
-        OSCPUUsage   = (INT8U)(100uL - OSIdleCtrRun / OSIdleCtrMax);
+        OSCPUUsage = (INT8U)(100uL - OSIdleCtrRun / OSIdleCtrMax);
         OSTaskStatHook();                        /* Invoke user definable hook                         */
 #if (OS_TASK_STAT_STK_CHK_EN > 0u) && (OS_TASK_CREATE_EXT_EN > 0u)
         OS_TaskStatStkChk();                     /* Check the stacks for each task                     */
@@ -2042,9 +2044,9 @@ void  OS_TaskStat (void *p_arg)
 */
 
 #if (OS_TASK_STAT_STK_CHK_EN > 0u) && (OS_TASK_CREATE_EXT_EN > 0u)
-void  OS_TaskStatStkChk (void)
+void  OS_TaskStatStkChk(void)
 {
-    OS_TCB      *ptcb;
+    OS_TCB* ptcb;
     OS_STK_DATA  stk_data;
     INT8U        err;
     INT8U        prio;
@@ -2054,7 +2056,7 @@ void  OS_TaskStatStkChk (void)
         err = OSTaskStkChk(prio, &stk_data);
         if (err == OS_ERR_NONE) {
             ptcb = OSTCBPrioTbl[prio];
-            if (ptcb != (OS_TCB *)0) {                               /* Make sure task 'ptcb' is ...   */
+            if (ptcb != (OS_TCB*)0) {                               /* Make sure task 'ptcb' is ...   */
                 if (ptcb != OS_TCB_RESERVED) {                       /* ... still valid.               */
 #if OS_TASK_PROFILE_EN > 0u
 #if OS_STK_GROWTH == 1u
@@ -2117,23 +2119,23 @@ void  OS_TaskStatStkChk (void)
 //printf("Task[%2d] created, TCB address\t%x\n", TaskParameter[ptcb->OSTCBPrio].TaskID, ptcb->OSTCBStkPtr);
 void Printing_TCB(OS_TCB* p_tcb)
 {
-    printf("------After TCB[%d] begin linked------\n", p_tcb->OSTCBPrio==63? p_tcb->OSTCBPrio: p_tcb->OSTCBPrio+1);
+    printf("------After TCB[%d] begin linked------\n", p_tcb->OSTCBPrio == 63 ? p_tcb->OSTCBPrio : p_tcb->OSTCBPrio + 1);
     printf("Previous TCB point to address\t %x\n", p_tcb->OSTCBPrev);
     printf("Current  TCB point to address\t %x\n", p_tcb);
     printf("Next     TCB point to address\t %x\n\n", p_tcb->OSTCBNext);
 }
-INT8U  OS_TCBInit (INT8U    prio,
-                   OS_STK  *ptos,
-                   OS_STK  *pbos,
-                   INT16U   id,
-                   INT32U   stk_size,
-                   void    *pext,
-                   INT16U   opt,
-                   INT8U   ExeTime,
-                   INT8U   ArrTime,
-                   INT8U   PerTime)
+INT8U  OS_TCBInit(INT8U    prio,
+    OS_STK* ptos,
+    OS_STK* pbos,
+    INT16U   id,
+    INT32U   stk_size,
+    void* pext,
+    INT16U   opt,
+    INT8U   ExeTime,
+    INT8U   ArrTime,
+    INT8U   PerTime)
 {
-    OS_TCB    *ptcb;
+    OS_TCB* ptcb;
 #if OS_CRITICAL_METHOD == 3u                               /* Allocate storage for CPU status register */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
@@ -2149,14 +2151,14 @@ INT8U  OS_TCBInit (INT8U    prio,
 
     OS_ENTER_CRITICAL();
     ptcb = OSTCBFreeList;                                  /* Get a free TCB from the free TCB list    */
-    if (ptcb != (OS_TCB *)0) {
-        OSTCBFreeList            = ptcb->OSTCBNext;        /* Update pointer to free TCB list          */
+    if (ptcb != (OS_TCB*)0) {
+        OSTCBFreeList = ptcb->OSTCBNext;        /* Update pointer to free TCB list          */
         OS_EXIT_CRITICAL();
-        ptcb->OSTCBStkPtr        = ptos;                   /* Load Stack pointer in TCB                */
-        ptcb->OSTCBPrio          = prio;                   /* Load task priority into TCB              */
-        ptcb->OSTCBStat          = OS_STAT_RDY;            /* Task is ready to run                     */
-        ptcb->OSTCBStatPend      = OS_STAT_PEND_OK;        /* Clear pend status                        */
-        ptcb->OSTCBDly           = 0u;                     /* Task is not delayed                      */
+        ptcb->OSTCBStkPtr = ptos;                   /* Load Stack pointer in TCB                */
+        ptcb->OSTCBPrio = prio;                   /* Load task priority into TCB              */
+        ptcb->OSTCBStat = OS_STAT_RDY;            /* Task is ready to run                     */
+        ptcb->OSTCBStatPend = OS_STAT_PEND_OK;        /* Clear pend status                        */
+        ptcb->OSTCBDly = 0u;                     /* Task is not delayed                      */
         if (prio == OS_TASK_IDLE_PRIO) {
             ptcb->ExecutionTime = 0;
             ptcb->reExecutionTime = 0;
@@ -2172,69 +2174,69 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->ExecutionTime = ExeTime;
             ptcb->reExecutionTime = ExeTime;
             ptcb->ArrivesTime = ArrTime;
-            ptcb->NextReadyTime = ArrTime+PerTime;
+            ptcb->NextReadyTime = ArrTime + PerTime;
             ptcb->PeriodicTime = PerTime;
             ptcb->DelayTime = 0;
             ptcb->Executed = 0;
             ptcb->StartTime = 0;
             ptcb->EndTime = 0;
         }
-        
+
 
 #if OS_TASK_CREATE_EXT_EN > 0u
-        ptcb->OSTCBExtPtr        = pext;                   /* Store pointer to TCB extension           */
-        ptcb->OSTCBStkSize       = stk_size;               /* Store stack size                         */
-        ptcb->OSTCBStkBottom     = pbos;                   /* Store pointer to bottom of stack         */
-        ptcb->OSTCBOpt           = opt;                    /* Store task options                       */
-        ptcb->OSTCBId            = id;                     /* Store task ID                            */
+        ptcb->OSTCBExtPtr = pext;                   /* Store pointer to TCB extension           */
+        ptcb->OSTCBStkSize = stk_size;               /* Store stack size                         */
+        ptcb->OSTCBStkBottom = pbos;                   /* Store pointer to bottom of stack         */
+        ptcb->OSTCBOpt = opt;                    /* Store task options                       */
+        ptcb->OSTCBId = id;                     /* Store task ID                            */
 #else
-        pext                     = pext;                   /* Prevent compiler warning if not used     */
-        stk_size                 = stk_size;
-        pbos                     = pbos;
-        opt                      = opt;
-        id                       = id;
+        pext = pext;                   /* Prevent compiler warning if not used     */
+        stk_size = stk_size;
+        pbos = pbos;
+        opt = opt;
+        id = id;
 #endif
 
 #if OS_TASK_DEL_EN > 0u
-        ptcb->OSTCBDelReq        = OS_ERR_NONE;
+        ptcb->OSTCBDelReq = OS_ERR_NONE;
 #endif
 
 #if OS_LOWEST_PRIO <= 63u                                         /* Pre-compute X, Y                  */
-        ptcb->OSTCBY             = (INT8U)(prio >> 3u);
-        ptcb->OSTCBX             = (INT8U)(prio & 0x07u);
+        ptcb->OSTCBY = (INT8U)(prio >> 3u);
+        ptcb->OSTCBX = (INT8U)(prio & 0x07u);
 #else                                                             /* Pre-compute X, Y                  */
-        ptcb->OSTCBY             = (INT8U)((INT8U)(prio >> 4u) & 0xFFu);
-        ptcb->OSTCBX             = (INT8U) (prio & 0x0Fu);
+        ptcb->OSTCBY = (INT8U)((INT8U)(prio >> 4u) & 0xFFu);
+        ptcb->OSTCBX = (INT8U)(prio & 0x0Fu);
 #endif
-                                                                  /* Pre-compute BitX and BitY         */
-        ptcb->OSTCBBitY          = (OS_PRIO)(1uL << ptcb->OSTCBY);
-        ptcb->OSTCBBitX          = (OS_PRIO)(1uL << ptcb->OSTCBX);
+        /* Pre-compute BitX and BitY         */
+        ptcb->OSTCBBitY = (OS_PRIO)(1uL << ptcb->OSTCBY);
+        ptcb->OSTCBBitX = (OS_PRIO)(1uL << ptcb->OSTCBX);
 
 #if (OS_EVENT_EN)
-        ptcb->OSTCBEventPtr      = (OS_EVENT  *)0;         /* Task is not pending on an  event         */
+        ptcb->OSTCBEventPtr = (OS_EVENT*)0;         /* Task is not pending on an  event         */
 #if (OS_EVENT_MULTI_EN > 0u)
-        ptcb->OSTCBEventMultiPtr = (OS_EVENT **)0;         /* Task is not pending on any events        */
+        ptcb->OSTCBEventMultiPtr = (OS_EVENT**)0;         /* Task is not pending on any events        */
 #endif
 #endif
 
 #if (OS_FLAG_EN > 0u) && (OS_MAX_FLAGS > 0u) && (OS_TASK_DEL_EN > 0u)
-        ptcb->OSTCBFlagNode      = (OS_FLAG_NODE *)0;      /* Task is not pending on an event flag     */
+        ptcb->OSTCBFlagNode = (OS_FLAG_NODE*)0;      /* Task is not pending on an event flag     */
 #endif
 
 #if (OS_MBOX_EN > 0u) || ((OS_Q_EN > 0u) && (OS_MAX_QS > 0u))
-        ptcb->OSTCBMsg           = (void *)0;              /* No message received                      */
+        ptcb->OSTCBMsg = (void*)0;              /* No message received                      */
 #endif
 
 #if OS_TASK_PROFILE_EN > 0u
-        ptcb->OSTCBCtxSwCtr      = 0uL;                    /* Initialize profiling variables           */
-        ptcb->OSTCBCyclesStart   = 0uL;
-        ptcb->OSTCBCyclesTot     = 0uL;
-        ptcb->OSTCBStkBase       = (OS_STK *)0;
-        ptcb->OSTCBStkUsed       = 0uL;
+        ptcb->OSTCBCtxSwCtr = 0uL;                    /* Initialize profiling variables           */
+        ptcb->OSTCBCyclesStart = 0uL;
+        ptcb->OSTCBCyclesTot = 0uL;
+        ptcb->OSTCBStkBase = (OS_STK*)0;
+        ptcb->OSTCBStkUsed = 0uL;
 #endif
 
 #if OS_TASK_NAME_EN > 0u
-        ptcb->OSTCBTaskName      = (INT8U *)(void *)"?";
+        ptcb->OSTCBTaskName = (INT8U*)(void*)"?";
 #endif
 
 #if OS_TASK_REG_TBL_SIZE > 0u                              /* Initialize the task variables            */
@@ -2262,14 +2264,14 @@ INT8U  OS_TCBInit (INT8U    prio,
 
         OS_ENTER_CRITICAL();
         ptcb->OSTCBNext = OSTCBList;                       /* Link into TCB chain                      */
-        ptcb->OSTCBPrev = (OS_TCB *)0;
+        ptcb->OSTCBPrev = (OS_TCB*)0;
 
         OSTCBHead = ptcb;
 
-        if (OSTCBList != (OS_TCB *)0) {
+        if (OSTCBList != (OS_TCB*)0) {
             OSTCBList->OSTCBPrev = ptcb;
         }
-        OSTCBList               = ptcb;
+        OSTCBList = ptcb;
         if (ptcb->OSTCBPrio == 63 || ptcb->ArrivesTime == 0) {
             /*printf("Ready task %d\n", ptcb->OSTCBId);*/
             OSRdyGrp |= ptcb->OSTCBBitY;                                /* Make task ready to run                   */

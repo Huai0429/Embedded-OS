@@ -69,7 +69,7 @@ static void task3(void* p_arg);
 *********************************************************************************************************
 */
 
-static  void  StartupTask (void  *p_arg);
+static  void  StartupTask(void* p_arg);
 
 
 /*
@@ -86,16 +86,16 @@ static  void  StartupTask (void  *p_arg);
 * Notes       : none
 *********************************************************************************************************
 */
-int cmp(task_para_set *TP1, task_para_set *TP2)
+int cmp(task_para_set* TP1, task_para_set* TP2)
 {
     int x = TP1->TaskExecutionTime;
     int y = TP2->TaskExecutionTime;
     //printf("%d %d\n", x, y);
     if (x > y) return x > y;
-    else if (x == y) return TP1->TaskPriority < TP2->TaskPriority ? 0:1;
-    return x>y;
+    else if (x == y) return TP1->TaskPriority < TP2->TaskPriority ? 0 : 1;
+    return x > y;
 }
-int  main (void)
+int  main(void)
 {
 #if OS_TASK_NAME_EN > 0u
     CPU_INT08U  os_err;
@@ -109,7 +109,7 @@ int  main (void)
     CPU_Init();                                                 /* Initialize the uC/CPU services                       */
 
     OSInit();                                                   /* Initialize uC/OS-II                                  */
-    
+
     //Huai
     OutFileInit();
 
@@ -168,14 +168,14 @@ int  main (void)
             TaskParameter[i].TaskPeriodic
         );
     }
-    
-    
+
+
 
     printf("\n================TCB linked list================\n");
     printf("Task\t Prev_TCB_addr \t TCB_addr\t Next_TCB_addr\n");
-    OS_TCB *head = OSTCBHead;
+    OS_TCB* head = OSTCBHead;
     while (head != 0) {
-        printf("%2d\t %11x\t   %6x\t      %6x\t \n", head->OSTCBPrio==63? head->OSTCBPrio:head->OSTCBPrio+1,head->OSTCBPrev,head,head->OSTCBNext);
+        printf("%2d\t %11x\t   %6x\t      %6x\t \n", head->OSTCBPrio == 63 ? head->OSTCBPrio : head->OSTCBPrio + 1, head->OSTCBPrev, head, head->OSTCBNext);
         head = head->OSTCBNext;
     }
     //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
@@ -193,7 +193,7 @@ int  main (void)
         }
         fclose(Output_fp);
     }*/
-    
+
 
 
 
@@ -201,8 +201,8 @@ int  main (void)
 
     OSTimeSet(0);
     OSStart();
-                                                  /* Start multitasking (i.e. give control to uC/OS-II)   */
-    
+    /* Start multitasking (i.e. give control to uC/OS-II)   */
+
     while (DEF_ON) {                                            /* Should Never Get Here.                               */
         ;
     }
@@ -214,7 +214,7 @@ static void task1(void* p_arg)
 
     task_para_set* task_data;
     task_data = p_arg;
-    
+
     while (1) {
         OSTCBCur->StartTime = OSTimeGet();
         int temp = OSTimeGet();
@@ -224,7 +224,7 @@ static void task1(void* p_arg)
         }
 
         OSTCBCur->EndTime = OSTimeGet();
-        OSTCBCur->DelayTime = OSTCBCur->NextReadyTime-OSTimeGet();
+        OSTCBCur->DelayTime = OSTCBCur->NextReadyTime - OSTimeGet();
         //printf("Delay: %d %d %d\n", OSTimeGet(), OSTCBCur->NextReadyTime, OSTimeGet() - OSTCBCur->NextReadyTime);
         OSTimeDly(OSTCBCur->NextReadyTime - OSTimeGet());
     }
@@ -233,10 +233,10 @@ static void task2(void* p_arg)
 {
     task_para_set* task_data;
     task_data = p_arg;
-    
+
     while (1) {
         int StartTime = OSTimeGet();
-        while(!OSTCBCur->Executed) { 
+        while (!OSTCBCur->Executed) {
             //printf("break task2\n"); 
             OSTCBCur->DelayTime = OSTimeGet();
             //cnt2++;
@@ -244,10 +244,10 @@ static void task2(void* p_arg)
             //printf("%2d\t Completion\n", OSTimeGet());
             //printf("D2 %d %d %d %d\n", task_data->TaskPeriodic, EndTime, OSTCBCur->NextReadyTime, abs(EndTime - OSTCBCur->NextReadyTime));
             OSTimeDly(abs(OSTimeGet() - OSTCBCur->NextReadyTime));
-            
+
         }
         //printf("executing task\n");
-        
+
     }
 
     //OSTimeDly(task_data->TaskPeriodic);
@@ -260,7 +260,7 @@ static void task2(void* p_arg)
         cnt1++;
         OSTimeDly(task_data->TaskPeriodic);
     }*/
-    
+
 }
 static void task3(void* p_arg)
 {
@@ -294,9 +294,9 @@ static void task3(void* p_arg)
 *********************************************************************************************************
 */
 
-static  void  StartupTask (void *p_arg)
+static  void  StartupTask(void* p_arg)
 {
-   (void)p_arg;
+    (void)p_arg;
 
     OS_TRACE_INIT();                                            /* Initialize the uC/OS-II Trace recorder               */
 
@@ -307,12 +307,12 @@ static  void  StartupTask (void *p_arg)
 #ifdef CPU_CFG_INT_DIS_MEAS_EN
     CPU_IntDisMeasMaxCurReset();
 #endif
-    
+
     APP_TRACE_DBG(("uCOS-III is Running...\n\r"));
 
     while (DEF_TRUE) {                                          /* Task body, always written as an infinite loop.       */
         OSTimeDlyHMSM(0u, 0u, 1u, 0u);
-		APP_TRACE_DBG(("Time: %d\n\r", OSTimeGet()));
+        APP_TRACE_DBG(("Time: %d\n\r", OSTimeGet()));
     }
 }
 
