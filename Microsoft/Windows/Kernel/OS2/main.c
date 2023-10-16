@@ -210,7 +210,7 @@ static void task1(void* p_arg)
     while (1) {
         OSTCBCur->StartTime = OSTimeGet();
         int temp = OSTimeGet();
-        OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSTCBCur->OSTCBPrio] + 1) * OSTCBCur->PeriodicTime;
+        OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
         while (!OSTCBCur->Executed /*|| !OSTCBCur->MissDeadline*/) {
 
         }
