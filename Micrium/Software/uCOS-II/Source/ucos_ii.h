@@ -66,7 +66,7 @@ extern "C" {
 #define SYSTEM_END_TIME 30
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet.txt"
+#define INPUT_FILE_NAME "./TaskSet2.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define MAX 20
 #define INFO 4
@@ -87,6 +87,7 @@ typedef struct task_para_set {
 int TASK_NUMBER; //number of input task 
 
 OS_STK** Task_STK;
+int* TaskCtr;
 task_para_set TaskParameter[OS_MAX_TASKS];
 
 void OutFileInit(void);
@@ -667,6 +668,17 @@ typedef struct os_tcb {
 #if OS_TASK_REG_TBL_SIZE > 0u
     INT32U           OSTCBRegTbl[OS_TASK_REG_TBL_SIZE];
 #endif
+    INT8U            ArrivesTime;
+    INT8U            ExecutionTime;
+    INT8U            reExecutionTime;
+    INT8U            PeriodicTime;
+    INT8U            NextReadyTime;
+    INT8U            DelayTime;
+    INT8U            Executed;
+    INT8U            MissDeadline;
+    INT8U            StartTime;
+    INT8U            EndTime;
+    INT8U            ResponseTime;
 } OS_TCB;
 
 
@@ -778,7 +790,7 @@ OS_EXT  OS_TCB           *OSTCBHighRdy;                    /* Pointer to highest
 OS_EXT  OS_TCB           *OSTCBList;                       /* Pointer to doubly linked list of TCBs    */
 OS_EXT  OS_TCB           *OSTCBPrioTbl[OS_LOWEST_PRIO + 1u];    /* Table of pointers to created TCBs   */
 OS_EXT  OS_TCB            OSTCBTbl[OS_MAX_TASKS + OS_N_SYS_TASKS];   /* Table of TCBs                  */
-
+OS_EXT  OS_TCB* OSTCBHead;// Huai
 #if OS_TICK_STEP_EN > 0u
 OS_EXT  INT8U             OSTickStepState;          /* Indicates the state of the tick step feature    */
 #endif

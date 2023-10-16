@@ -58,7 +58,7 @@ void  OSTimeDly (INT32U ticks)
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-
+    OSTCBCur->Executed = 0; //Huai
 
 
     if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
