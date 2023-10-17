@@ -1,7 +1,38 @@
-﻿  os_core.c
-C:\Users\Huai\Desktop\temp\temp\Embedded-OS\Micrium\Software\uCOS-II\Source\os_core.c(995,9): warning C4013: 'exit' undefined; assuming extern returning int
-C:\Users\Huai\Desktop\temp\temp\Embedded-OS\Micrium\Software\uCOS-II\Source\os_core.c(2133,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
-C:\Users\Huai\Desktop\temp\temp\Embedded-OS\Micrium\Software\uCOS-II\Source\os_core.c(2134,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'OS_TCB *'
-C:\Users\Huai\Desktop\temp\temp\Embedded-OS\Micrium\Software\uCOS-II\Source\os_core.c(2135,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
-C:\Users\Huai\Desktop\temp\temp\Embedded-OS\Micrium\Software\uCOS-II\Source\os_core.c(2147,1): warning C4029: declared formal parameter list different from definition
-  OS2.vcxproj -> C:\Users\Huai\Desktop\temp\temp\Embedded-OS\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+﻿  os_cpu_c.c
+  os_core.c
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(995,9): warning C4013: 'exit' undefined; assuming extern returning int
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1040,58): warning C4018: '>': signed/unsigned mismatch
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2137,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2138,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'OS_TCB *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2139,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2151,1): warning C4029: declared formal parameter list different from definition
+  os_dbg_r.c
+  os_flag.c
+  os_mbox.c
+  os_mem.c
+  os_mutex.c
+  os_q.c
+  os_sem.c
+  os_task.c
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c(362,1): warning C4029: declared formal parameter list different from definition
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c(398,68): warning C4020: 'OS_TCBInit': too many actual parameters
+  os_time.c
+  os_tmr.c
+  app_hooks.c
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\app_hooks.c(128,27): warning C4013: 'atoi' undefined; assuming extern returning int
+  main.c
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(119,16): warning C4013: 'malloc' undefined; assuming extern returning int
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(119,14): warning C4047: '=': 'OS_STK **' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(120,15): warning C4013: 'calloc' undefined; assuming extern returning int
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(120,13): warning C4047: '=': 'int *' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(123,21): warning C4047: '=': 'OS_STK *' differs in levels of indirection from 'int'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(125,5): warning C4013: 'qsort' undefined; assuming extern returning int
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(162,29): warning C4244: 'function': conversion from 'INT16U' to 'INT8U', possible loss of data
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(168,29): warning C4020: 'OSTaskCreateExt': too many actual parameters
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(180,16): warning C4477: 'printf' : format string '%11x' requires an argument of type 'unsigned int', but variadic argument 2 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(180,16): warning C4477: 'printf' : format string '%6x' requires an argument of type 'unsigned int', but variadic argument 3 has type 'OS_TCB *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(180,16): warning C4477: 'printf' : format string '%6x' requires an argument of type 'unsigned int', but variadic argument 4 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(103,17): warning C4101: 'os_err': unreferenced local variable
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(238,23): warning C4013: 'abs' undefined; assuming extern returning int
+  Generating Code...
+  OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
