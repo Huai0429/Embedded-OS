@@ -1037,7 +1037,7 @@ void  OSTimeTick (void)
                 
             }
             else {
-                if ((OSTimeGet()-1) + ptcb->MissDeadline > ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime) {
+                if ((OSTimeGet()-1) + ptcb->ExecutionTime > ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime) {
                     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                         printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
                         fprintf(Output_fp, "%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
