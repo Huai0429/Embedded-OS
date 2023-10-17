@@ -707,8 +707,11 @@ void  OSIntExit (void)
         }
         if (OSIntNesting == 0u) {                          /* Reschedule only if all ISRs complete ... */
             if (OSLockNesting == 0u) {                     /* ... and not locked.                      */
-                OS_SchedNew();
-                OSTCBHighRdy = OSTCBPrioTbl[OSPrioHighRdy];
+                
+                if (OSPrioCur == 63) {
+                    OS_SchedNew();
+                    OSTCBHighRdy = OSTCBPrioTbl[OSPrioHighRdy];
+                }
                 if (OSPrioHighRdy != OSPrioCur) {          /* No Ctx Sw if current task is highest rdy */
 #if OS_TASK_PROFILE_EN > 0u
                     OSTCBHighRdy->OSTCBCtxSwCtr++;         /* Inc. # of context switches to this task  */
@@ -991,7 +994,7 @@ void  OSTimeTick (void)
     // setting end time for OS
     if (OSTimeGet() > SYSTEM_END_TIME) {
         OSRunning = OS_FALSE;
-        //system("pause");
+        system("pause");
         exit(0);
     }
     //End of Huai
@@ -1037,14 +1040,14 @@ void  OSTimeTick (void)
                 
             }
             else {
-                if ((OSTimeGet()-1) + ptcb->MissDeadline > ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime) {
+                if ((OSTimeGet()-1) + ptcb->ExecutionTime > ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime) {
                     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                         printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
                         fprintf(Output_fp, "%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
                         fclose(Output_fp);
                     }
                     OSRunning = OS_FALSE;
-                    //system("pause");
+                    system("pause");
                     exit(0);
                 }
             }
@@ -1871,7 +1874,7 @@ void  OS_Sched (void)
 *********************************************************************************************************
 */
 
-static  void  OS_SchedNew (void)
+static  void  OS_SchedNew (void)    
 {
 #if OS_LOWEST_PRIO <= 63u                        /* See if we support up to 64 tasks                   */
     INT8U   y;
@@ -1882,6 +1885,9 @@ static  void  OS_SchedNew (void)
     if (OSTCBPrioTbl[OSPrioCur]->Executed == 1) {
         OSPrioHighRdy = OSPrioCur;
     }
+    /*if (OSTCBPrioTbl[OSPrioCur]->Executed == 0 && OSTCBPrioTbl[OSPrioCur]->ExecutionTime!=0) {
+        OSPrioHighRdy = OSPrioCur;
+    }*/
 #else                                            /* We support up to 256 tasks                         */
     INT8U     y;
     OS_PRIO  *ptbl;

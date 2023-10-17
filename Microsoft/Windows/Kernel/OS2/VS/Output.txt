@@ -3,16 +3,14 @@
  5	Preemption	task(63)	task( 1)( 1)	
  6	Completion	task( 1)( 1)	task(63)		 1		 0		 4
  8	Preemption	task(63)	task( 2)( 1)	
-10	Preemption	task( 2)( 1)	task( 1)( 2)	
-11	Completion	task( 1)( 2)	task( 2)( 1)		 1		 0		 4
-12	Completion	task( 2)( 1)	task(63)		 4		 1		 4
+11	Completion	task( 2)( 1)	task( 1)( 2)		 3		 0		 5
+12	Completion	task( 1)( 2)	task(63)		 2		 1		 3
 15	Preemption	task(63)	task( 1)( 3)	
 16	Completion	task( 1)( 3)	task( 2)( 2)		 1		 0		 4
 19	Completion	task( 2)( 2)	task(63)		 3		 0		 5
 20	Preemption	task(63)	task( 1)( 4)	
 21	Completion	task( 1)( 4)	task(63)		 1		 0		 4
 24	Preemption	task(63)	task( 2)( 3)	
-25	Preemption	task( 2)( 3)	task( 1)( 5)	
-26	Completion	task( 1)( 5)	task( 2)( 3)		 1		 0		 4
-28	Completion	task( 2)( 3)	task(63)		 4		 1		 4
+27	Completion	task( 2)( 3)	task( 1)( 5)		 3		 0		 5
+28	Completion	task( 1)( 5)	task(63)		 3		 2		 2
 30	Preemption	task(63)	task( 1)( 6)	

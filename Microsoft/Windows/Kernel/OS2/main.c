@@ -90,12 +90,12 @@ int cmp(task_para_set* TP1, task_para_set* TP2)
 {
     /*int x = TP1->TaskExecutionTime;
     int y = TP2->TaskExecutionTime;*/
-    int x = TP1->TaskPeriodic;
-    int y = TP2->TaskPeriodic;
+    int x = TP1->TaskID;
+    int y = TP2->TaskID;
     //printf("%d %d\n", x, y);
     if (x > y) return x > y;
-    else if (x == y) return TP1->TaskPriority < TP2->TaskPriority ? 0 : 1;
-    return x > y;
+    /*else if (x == y) return TP1->TaskPriority < TP2->TaskPriority ? 0 : 1;*/
+    return x < y;
 }
 int  main(void)
 {
@@ -122,7 +122,7 @@ int  main(void)
     for (n = 0; n < TASK_NUMBER; n++) {
         Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
     }
-    qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
+    //qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
     for (int i = 0; i < TASK_NUMBER; i++) {
         printf("%d %d %d %d\n", TaskParameter[i].TaskID, TaskParameter[i].TaskArriveTime, TaskParameter[i].TaskExecutionTime, TaskParameter[i].TaskPeriodic);
     }
