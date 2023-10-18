@@ -66,7 +66,7 @@ extern "C" {
 #define SYSTEM_END_TIME 30
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet.txt"
+#define INPUT_FILE_NAME "./TaskSet2.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define MAX 20
 #define INFO 4

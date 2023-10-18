@@ -1029,27 +1029,25 @@ void  OSTimeTick (void)
             // Huai
             if (OSTCBCur == ptcb) {
                 ptcb->ExecutionTime--;
-                ptcb->MissDeadline++;
+                //ptcb->MissDeadline++;
                 if (ptcb->ExecutionTime == 0) {
                     ptcb->Executed = 1;
                     ptcb->MissDeadline = 0;
                     ptcb->ResponseTime = OSTimeGet() - (ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio]) * ptcb->PeriodicTime);
                     ptcb->ExecutionTime = ptcb->reExecutionTime;
-                    //ptcb->OSTCBDeadline = ptcb->OSTCBArrivedTime + (TaskCounterHW[ptcb->OSTCBPrio] + 1) * ptcb->OSTCBPeriodic;
                 }
-                
             }
-            else {
-                if ((OSTimeGet()-1) + ptcb->ExecutionTime > ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime) {
-                    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-                        printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
-                        fprintf(Output_fp, "%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
-                        fclose(Output_fp);
-                    }
-                    OSRunning = OS_FALSE;
-                    system("pause");
-                    exit(0);
+            ptcb->MissDeadline++;
+            if (ptcb->MissDeadline >= ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime && ptcb->Executed == 0) {
+                OSTCBCur->Executed = 1;
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fprintf(Output_fp, "%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fclose(Output_fp);
                 }
+                OSRunning = OS_FALSE;
+                system("pause");
+                exit(0);
             }
             if (OSTimeGet() == ptcb->ArrivesTime) {
                 //printf("task %d is ready\n", ptcb->OSTCBId);
@@ -1881,7 +1879,27 @@ static  void  OS_SchedNew (void)
 
     
     y             = OSUnMapTbl[OSRdyGrp];
-    OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
+    //printf("%2d OS_SchedNew %d \n",OSTimeGet() , OSRdyTbl[y]);
+    
+    //printf("%d %d %d %d %d\n", OSRdyTbl[y], OSRdyTbl[y] & (1 << 0),OSRdyTbl[y] &(1 << 1), OSRdyTbl[y] &(1 << 2), OSRdyTbl[y]&(1<<3));
+    int minrdy = 30,minprio = 63;
+    for (int i = 0; i < TASK_NUMBER; i++) {
+        int temp = OSRdyTbl[y] & (1 << i);
+        if (temp) {
+            int a = (INT8U)((y << 3u) + OSUnMapTbl[temp]);
+            if (OSTCBPrioTbl[a]->NextReadyTime - OSTCBPrioTbl[a]->PeriodicTime < minrdy) {
+                minrdy = OSTCBPrioTbl[a]->NextReadyTime - OSTCBPrioTbl[a]->PeriodicTime;
+                minprio = OSTCBPrioTbl[a]->OSTCBPrio;
+            }
+            else if(OSTCBPrioTbl[a]->NextReadyTime - OSTCBPrioTbl[a]->PeriodicTime == minrdy){
+                minprio = OSTCBPrioTbl[a]->OSTCBPrio>minprio? minprio : OSTCBPrioTbl[a]->OSTCBPrio;
+            }
+            //printf("%2d %d %d\n", OSTimeGet(), (INT8U)((y << 3u) + OSUnMapTbl[temp]), OSTCBPrioTbl[(INT8U)((y << 3u) + OSUnMapTbl[temp])]->NextReadyTime- OSTCBPrioTbl[(INT8U)((y << 3u) + OSUnMapTbl[temp])]->PeriodicTime);
+        }
+    }
+    //printf("%2d %d\n", OSTimeGet(), minprio);
+    //OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
+    OSPrioHighRdy = minprio;
     if (OSTCBPrioTbl[OSPrioCur]->Executed == 1) {
         OSPrioHighRdy = OSPrioCur;
     }
