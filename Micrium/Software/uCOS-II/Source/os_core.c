@@ -1848,6 +1848,24 @@ void  OS_Sched (void)
                 
                 OS_TASK_SW();                          /* Perform a context switch                     */
             }
+            else {
+                int prevReadytime = OSTCBCur->NextReadyTime - OSTCBCur->PeriodicTime;
+                printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy] + 1, OSTCBCur->ResponseTime, OSTCBCur->EndTime - prevReadytime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->EndTime - prevReadytime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],
+                        OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,
+                        OSTCBCur->EndTime - prevReadytime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
+                    fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy] + 1, OSTCBCur->ResponseTime, OSTCBCur->EndTime - prevReadytime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                    fclose(Output_fp);
+                }
+                TaskCtr[OSPrioCur]++;
+                OSTCBCur->ResponseTime = 0;
+                OSTCBCur->EndTime = 0;
+                prevReadytime = 0;
+                OSTCBCur->DelayTime = 0;
+            }
         }
     }
     OS_EXIT_CRITICAL();

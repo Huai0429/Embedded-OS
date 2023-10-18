@@ -54,11 +54,12 @@
 
 void  OSTimeDly (INT32U ticks)
 {
+    
     INT8U      y;
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-    OSTCBCur->Executed = 0; //Huai
+    //OSTCBCur->Executed = 0; //Huai
 
 
     if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
@@ -67,13 +68,23 @@ void  OSTimeDly (INT32U ticks)
     if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
         return;
     }
-    if (ticks > 0u) {                            /* 0 means no delay!                                  */
-        OS_ENTER_CRITICAL();
-        y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
-        OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
-        OS_TRACE_TASK_SUSPENDED(OSTCBCur);
-        if (OSRdyTbl[y] == 0u) {
-            OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
+    if (ticks >= 0u) {                            /* 0 means no delay!                                  */
+        OS_ENTER_CRITICAL();    
+        //y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
+        //OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
+        //OS_TRACE_TASK_SUSPENDED(OSTCBCur);
+        //if (OSRdyTbl[y] == 0u) {
+        //    OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
+        //}
+        OSTCBCur->Executed = 0;
+        if (!ticks == 0) {
+            y = OSTCBCur->OSTCBY;        /* Delay current task                                 */
+            OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
+            OS_TRACE_TASK_SUSPENDED(OSTCBCur);
+            if (OSRdyTbl[y] == 0u) {
+                OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
+            }
+
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_TRACE_TASK_DLY(ticks);
