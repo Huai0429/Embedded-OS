@@ -1026,27 +1026,26 @@ void  OSTimeTick (void)
             // Huai
             if (OSTCBCur == ptcb) {
                 ptcb->ExecutionTime--;
-                ptcb->MissDeadline++;
+                //ptcb->MissDeadline++;
                 if (ptcb->ExecutionTime == 0) {
                     ptcb->Executed = 1;
                     ptcb->MissDeadline = 0;
                     ptcb->ResponseTime = OSTimeGet() - (ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio]) * ptcb->PeriodicTime);
                     ptcb->ExecutionTime = ptcb->reExecutionTime;
-                    //ptcb->OSTCBDeadline = ptcb->OSTCBArrivedTime + (TaskCounterHW[ptcb->OSTCBPrio] + 1) * ptcb->OSTCBPeriodic;
                 }
                 
             }
-            else {
-                if ((OSTimeGet()-1) + ptcb->ExecutionTime > ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime) {
-                    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-                        printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
-                        fprintf(Output_fp, "%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
-                        fclose(Output_fp);
-                    }
-                    OSRunning = OS_FALSE;
-                    //system("pause");
-                    exit(0);
+            ptcb->MissDeadline++;
+            if (ptcb->MissDeadline >= ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio] + 1) * ptcb->PeriodicTime && ptcb->Executed == 0) {
+                OSTCBCur->Executed = 1;
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fprintf(Output_fp, "%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fclose(Output_fp);
                 }
+                OSRunning = OS_FALSE;
+                system("pause");
+                exit(0);
             }
             if (OSTimeGet() == ptcb->ArrivesTime) {
                 //printf("task %d is ready\n", ptcb->OSTCBId);
