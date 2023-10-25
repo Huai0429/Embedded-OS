@@ -67,13 +67,23 @@ void  OSTimeDly (INT32U ticks)
     if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
         return;
     }
-    if (ticks > 0u) {                            /* 0 means no delay!                                  */
+    if (ticks >= 0u) {                            /* 0 means no delay!                                  */
         OS_ENTER_CRITICAL();
-        y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
-        OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
-        OS_TRACE_TASK_SUSPENDED(OSTCBCur);
-        if (OSRdyTbl[y] == 0u) {
-            OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
+        //y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
+        //OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
+        //OS_TRACE_TASK_SUSPENDED(OSTCBCur);
+        //if (OSRdyTbl[y] == 0u) {
+        //    OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
+        //}
+        OSTCBCur->Executed = 0;
+        if (!ticks == 0) {
+            y = OSTCBCur->OSTCBY;        /* Delay current task                                 */
+            OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
+            OS_TRACE_TASK_SUSPENDED(OSTCBCur);
+            if (OSRdyTbl[y] == 0u) {
+                OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
+            }
+
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_TRACE_TASK_DLY(ticks);

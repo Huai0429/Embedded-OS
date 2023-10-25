@@ -1,8 +1,8 @@
 ﻿  os_core.c
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(997,9): warning C4013: 'system' undefined; assuming extern returning int
 C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(998,9): warning C4013: 'exit' undefined; assuming extern returning int
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2168,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2169,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'OS_TCB *'
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2170,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2182,1): warning C4029: declared formal parameter list different from definition
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2161,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2162,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'OS_TCB *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2163,12): warning C4477: 'printf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2175,1): warning C4029: declared formal parameter list different from definition
   OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
