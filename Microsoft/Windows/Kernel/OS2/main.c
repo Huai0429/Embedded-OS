@@ -122,7 +122,7 @@ int  main(void)
     for (n = 0; n < TASK_NUMBER; n++) {
         Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
     }
-    qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
+    //qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
     for (int i = 0; i < TASK_NUMBER; i++) {
         printf("%d %d %d %d\n", TaskParameter[i].TaskID, TaskParameter[i].TaskArriveTime, TaskParameter[i].TaskExecutionTime, TaskParameter[i].TaskPeriodic);
     }

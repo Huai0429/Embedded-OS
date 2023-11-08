@@ -77,7 +77,7 @@ void  OSTimeDly (INT32U ticks)
         //    OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
         //}
         OSTCBCur->Executed = 0;
-        if (!ticks == 0) {
+        if (ticks > 0) {
             y = OSTCBCur->OSTCBY;        /* Delay current task                                 */
             OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
             OS_TRACE_TASK_SUSPENDED(OSTCBCur);
@@ -85,6 +85,9 @@ void  OSTimeDly (INT32U ticks)
                 OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
             }
 
+        }
+        else {
+            OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 2) * OSTCBCur->PeriodicTime;
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_TRACE_TASK_DLY(ticks);

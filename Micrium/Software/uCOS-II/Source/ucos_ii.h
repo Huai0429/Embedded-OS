@@ -63,10 +63,10 @@ extern "C" {
 */
 
 // Huai
-#define SYSTEM_END_TIME 30
+#define SYSTEM_END_TIME 40
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet.txt"
+#define INPUT_FILE_NAME "./TaskSet1.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define MAX 20
 #define INFO 4
