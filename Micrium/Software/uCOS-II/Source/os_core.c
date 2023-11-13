@@ -1020,6 +1020,58 @@ void  OSTimeTick (void)
             return;
         }
 #endif
+        for (int i = 0; i < AP_TASK_NUMBER; i++) {
+            if (AP_TaskParameter[i].TaskArriveTime == OSTimeGet() ) {
+                if (AP_TaskParameter[i].TaskArriveTime > ServerDeadline) {
+                    ServerDeadline = OSTimeGet() + (AP_TaskParameter[i].TaskExecutionTime * (100 / TaskParameter[TASK_NUMBER - 1].TaskArriveTime));
+                    printf("%2d\tAperiodic job(%d) arrives and sets CUS server's deadline as %d\n", OSTimeGet(), AP_TaskParameter[i].TaskPriority - TASK_NUMBER, ServerDeadline);
+                    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                        fprintf(Output_fp,"%2d\tAperiodic job(%d) arrives and sets CUS server's deadline as %d.\n", OSTimeGet(), AP_TaskParameter[i].TaskPriority - TASK_NUMBER, ServerDeadline);
+                        fclose(Output_fp);
+                    }
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->ArrivesTime = AP_TaskParameter[i].TaskArriveTime;
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->NextReadyTime = ServerDeadline;
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->ExecutionTime = AP_TaskParameter[i].TaskExecutionTime;
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->reExecutionTime = AP_TaskParameter[i].TaskExecutionTime;
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->Executed = 0;
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->ResponseTime = OSTimeGet();
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->AP = 1;
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->AP_absoulte_deadline = AP_TaskParameter[i].TaskPeriodic;
+                }
+                else {
+                    printf("%2d\tAperiodic job(%d) arrives. Do nothing.\n", OSTimeGet(), AP_TaskParameter[i].TaskPriority - TASK_NUMBER);
+                    if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                        fprintf(Output_fp,"%2d\tAperiodic job(%d) arrives. Do nothing.\n", OSTimeGet(), AP_TaskParameter[i].TaskPriority - TASK_NUMBER);
+                        fclose(Output_fp);
+                    }
+                    OSTCBPrioTbl[TASK_NUMBER - 1]->ResponseTime = OSTimeGet();
+                }
+            }
+                
+        }
+
+        if (OSTimeGet() == ServerDeadline && ServerDeadline != 0&& CUSBeenDone != AP_TASK_NUMBER) {
+            ServerDeadline = ServerDeadline + AP_TaskParameter[CUSBeenDone].TaskExecutionTime * 100 / TaskParameter[TASK_NUMBER - 1].TaskArriveTime;
+            /* load deadline to CUS */
+            OSTCBPrioTbl[TASK_NUMBER - 1]->ArrivesTime = OSTimeGet();
+            OSTCBPrioTbl[TASK_NUMBER - 1]->NextReadyTime = ServerDeadline;
+            OSTCBPrioTbl[TASK_NUMBER - 1]->ExecutionTime =AP_TaskParameter[CUSBeenDone].TaskExecutionTime;
+            //OSTCBPrioTbl[TASK_NUMBER - 1]->ResponseTime = OSTimeGet();
+            OSTCBPrioTbl[TASK_NUMBER - 1]->reExecutionTime = AP_TaskParameter[CUSBeenDone].TaskExecutionTime;
+            OSTCBPrioTbl[TASK_NUMBER - 1]->AP = 1;
+            OSTCBPrioTbl[TASK_NUMBER - 1]->Executed = 0;
+            OSTCBPrioTbl[TASK_NUMBER - 1]->AP_absoulte_deadline = AP_TaskParameter[CUSBeenDone].TaskPeriodic;
+            
+            printf("%2d\tAperiodic job(%d) sets CUS server's deadline  as %2d.\n", OSTimeGet(), 1, ServerDeadline);
+            if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                fprintf(Output_fp,"%2d\tAperiodic job(%d) sets CUS server's deadline  as %2d.\n", OSTimeGet(), 1, ServerDeadline);
+                fclose(Output_fp);
+            }
+        }
+        if (CUSBeenDone == AP_TASK_NUMBER) {
+            OSTCBPrioTbl[TASK_NUMBER - 1]->NextReadyTime = 254; OSTCBPrioTbl[TASK_NUMBER - 1]->AP_absoulte_deadline = 254;
+        }
+
         ptcb = OSTCBList;                                  /* Point at first TCB in TCB list               */
         while (ptcb->OSTCBPrio != OS_TASK_IDLE_PRIO) {     /* Go through all TCBs in TCB list              */
             OS_ENTER_CRITICAL();
@@ -1032,11 +1084,20 @@ void  OSTimeTick (void)
                     ptcb->MissDeadline = 0;
                     ptcb->ResponseTime = OSTimeGet() - (ptcb->ArrivesTime + (TaskCtr[ptcb->OSTCBPrio]) * ptcb->PeriodicTime);
                     ptcb->ExecutionTime = ptcb->reExecutionTime;
+                    if (ptcb->OSTCBId == TASK_NUMBER) {
+                        printf("%2d\tAperiodic job(%d) is finished.\n", OSTimeGet(), CUSBeenDone);
+                        if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                            fprintf(Output_fp,"%2d\tAperiodic job(%d) is finished.\n", OSTimeGet(), CUSBeenDone);
+                            fclose(Output_fp);
+                        }
+
+                        CUSBeenDone++;
+                    }
                 }
                 
             }
-            ptcb->MissDeadline++;
-            if (OSTimeGet() >= ptcb->NextReadyTime && ptcb->Executed == 0) {
+            //ptcb->MissDeadline++;
+            if ((OSTimeGet() >= ptcb->NextReadyTime && ptcb->Executed == 0 && !ptcb->AP) || (ptcb->AP && OSTimeGet() >= ptcb->AP_absoulte_deadline && ptcb->Executed == 0)) {
                 OSTCBCur->Executed = 1;
                 if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                     printf("%2d\tMissDeadline\ttask(%2d)(%2d)\t-------------------\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
@@ -1818,23 +1879,30 @@ void  OS_Sched (void)
                         OSTCBCur->DelayTime = 0;
                     }
                     else {
-                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,OSTCBCur->EndTime - OSTCBCur->StartTime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
-                        //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->EndTime - prevReadytime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
-
-                        if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-                            /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],
-                                OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,
-                                OSTCBCur->EndTime - prevReadytime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
-                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId , TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,  OSTCBCur->EndTime - OSTCBCur->StartTime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
-                            fclose(Output_fp);
+                        if (OSTCBCur->AP) {
+                            printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\tN/A\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->EndTime - OSTCBCur->StartTime - OSTCBCur->reExecutionTime);
+                            if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                                fprintf(Output_fp,"%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\tN/A\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->EndTime - OSTCBCur->StartTime - OSTCBCur->reExecutionTime);
+                                fclose(Output_fp);
+                            }
+                            TaskCtr[OSPrioCur]++;
+                            OSTCBCur->ResponseTime = 0;
                         }
-                        TaskCtr[OSPrioCur]++;
-                        OSTCBCur->ResponseTime = 0;
-                        OSTCBCur->EndTime = 0;
-                        prevReadytime = 0;
-                        OSTCBCur->DelayTime = 0;
+                        else {
+
+                            printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->EndTime - OSTCBCur->StartTime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                            if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                                fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->EndTime - OSTCBCur->StartTime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                                fclose(Output_fp);
+                            }
+                            TaskCtr[OSPrioCur]++;
+                            OSTCBCur->ResponseTime = 0;
+                            OSTCBCur->EndTime = 0;
+                            prevReadytime = 0;
+                            OSTCBCur->DelayTime = 0;
+                        }
                     }
-                    OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
+                    OSTCBCur->NextReadyTime = OSTCBCur->AP ? 0 : OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
                 }
                 
                 //End of Huai
@@ -1907,7 +1975,7 @@ static  void  OS_SchedNew (void)
             else if (OSTCBPrioTbl[a]->NextReadyTime == Earliest) {
                 minprio = OSTCBPrioTbl[a]->OSTCBPrio > minprio ? minprio : OSTCBPrioTbl[a]->OSTCBPrio;
             }
-            //printf("%2d %d %d %d \n", OSTimeGet(), a, Earliest, OSTCBPrioTbl[a]->NextReadyTime);
+            //printf("%2d %d %d %d %d %d \n", OSTimeGet(), a, Earliest, OSTCBPrioTbl[a]->NextReadyTime, CUSBeenDone, AP_TASK_NUMBER);
         }
     }
     //printf("%2d %d\n", OSTimeGet(), minprio);
@@ -2218,6 +2286,8 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->StartTime = 0;
             ptcb->EndTime = 0;
             ptcb->MissDeadline = 0;
+            ptcb->AP = 0;
+            ptcb->AP_absoulte_deadline = 0;
         }
         else {
             ptcb->ExecutionTime = ExeTime;
@@ -2230,6 +2300,8 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->StartTime = 0;
             ptcb->EndTime = 0;
             ptcb->MissDeadline = 0;
+            ptcb->AP = 0;
+            ptcb->AP_absoulte_deadline = 0;
         }
 #if OS_TASK_CREATE_EXT_EN > 0u
         ptcb->OSTCBExtPtr        = pext;                   /* Store pointer to TCB extension           */

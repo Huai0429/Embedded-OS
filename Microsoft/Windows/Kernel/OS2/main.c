@@ -116,11 +116,16 @@ int  main(void)
     OutFileInit();
 
     InputFile();
+    AP_InputFile();
     Task_STK = malloc(TASK_NUMBER * sizeof(int*));
+    AP_Task_STK = malloc(AP_TASK_NUMBER * sizeof(int*));
     TaskCtr = calloc(TASK_NUMBER, sizeof(int));
     int n;
     for (n = 0; n < TASK_NUMBER; n++) {
         Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
+    }
+    for (n = 0; n < AP_TASK_NUMBER; n++) {
+        AP_Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
     }
     //qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
     for (int i = 0; i < TASK_NUMBER; i++) {
@@ -154,7 +159,7 @@ int  main(void)
         TaskParameter[1].TaskArriveTime,
         TaskParameter[1].TaskPeriodic
     );*/
-    for (int i = 0; i < TASK_NUMBER; i++) {
+    for (int i = 0; i < TASK_NUMBER-1; i++) {
         TaskParameter[i].TaskPriority = i;
         OSTaskCreateExt(task1,
             &TaskParameter[i],
@@ -171,6 +176,18 @@ int  main(void)
         );
     }
 
+    OSTaskCreateExt(task1,
+        &TaskParameter[TASK_NUMBER - 1],
+        &Task_STK[TASK_NUMBER - 1][TASK_STKSIZE - 1],
+        TaskParameter[TASK_NUMBER - 1].TaskPriority,
+        TaskParameter[TASK_NUMBER - 1].TaskID,
+        &Task_STK[TASK_NUMBER - 1][0],
+        TASK_STKSIZE,
+        &TaskParameter[TASK_NUMBER - 1],
+        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR),
+        0,
+        0,
+        254);
 
 
     printf("\n================TCB linked list================\n");
@@ -181,7 +198,8 @@ int  main(void)
         head = head->OSTCBNext;
     }
     //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
-
+    ServerDeadline = 0;
+    CUSBeenDone = 0;
     printf("Tick\tEvent\t      CurrentTask ID\tNextTask ID\t  ResponseTime\t  PreemptionTime   OSTimeDly\n");
 
     /*if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
@@ -210,7 +228,8 @@ static void task1(void* p_arg)
     while (1) {
         OSTCBCur->StartTime = OSTimeGet();
         int temp = OSTimeGet();
-        OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
+        if(!OSTCBCur->AP)
+            OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
         while (!OSTCBCur->Executed /*|| !OSTCBCur->MissDeadline*/) {
 
         }
@@ -218,6 +237,7 @@ static void task1(void* p_arg)
         OSTCBCur->EndTime = OSTimeGet();
         OSTCBCur->DelayTime = OSTCBCur->NextReadyTime - OSTimeGet();
         //printf("Delay: %d %d %d\n", OSTimeGet(), OSTCBCur->NextReadyTime, OSTimeGet() - OSTCBCur->NextReadyTime);
+
         OSTimeDly(OSTCBCur->NextReadyTime - OSTimeGet());
     }
 }

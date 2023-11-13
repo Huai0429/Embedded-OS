@@ -66,8 +66,9 @@ extern "C" {
 #define SYSTEM_END_TIME 40
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet1.txt"
+#define INPUT_FILE_NAME "./TaskSet.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
+#define APERIODIC_FILE_NAME "./Aperiodicjobs.txt"
 #define MAX 20
 #define INFO 4
 
@@ -85,14 +86,19 @@ typedef struct task_para_set {
 }task_para_set;
 
 int TASK_NUMBER; //number of input task 
+int AP_TASK_NUMBER; //number of input task 
+int ServerDeadline;
+int CUSBeenDone;
 
 OS_STK** Task_STK;
+OS_STK** AP_Task_STK;
 int* TaskCtr;
 task_para_set TaskParameter[OS_MAX_TASKS];
+task_para_set AP_TaskParameter[OS_MAX_TASKS];
 
 void OutFileInit(void);
 void InputFile(void);
-
+void AP_InputFile(void);
 
 // End of Huai
 
@@ -679,6 +685,8 @@ typedef struct os_tcb {
     INT8U            StartTime;
     INT8U            EndTime;
     INT8U            ResponseTime;
+    INT8U            AP;
+    INT8U            AP_absoulte_deadline;
 } OS_TCB;
 
 

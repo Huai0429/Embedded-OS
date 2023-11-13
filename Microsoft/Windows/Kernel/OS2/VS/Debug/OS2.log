@@ -1,1 +1,15 @@
-﻿  OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+﻿  os_core.c
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(994,9): warning C4013: 'system' 未定義; 假設 extern 傳回整數
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(995,9): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1032,85): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1034,87): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1035,89): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1039,94): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1058,88): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1060,91): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1063,96): warning C4244: '=': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2239,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2240,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2241,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2253,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
+  OS2.vcxproj -> C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

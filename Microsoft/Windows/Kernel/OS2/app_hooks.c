@@ -138,6 +138,46 @@ void InputFile()
         j++;
     }
     fclose(fp);
+    //printf("%d\n", TASK_NUMBER);
+}
+
+void AP_InputFile()
+{
+    errno_t err;
+    if ((err = fopen_s(&fp, APERIODIC_FILE_NAME, "r")) == 0) {
+        printf("Reading Aperiodic TaskSet.txt\n");
+    }
+    else
+    {
+        printf("Aperiodic TaskSet open with error\n");
+    }
+
+    char str[MAX];
+    char* ptr;
+    char* pTmp = NULL;
+    int TaskInfo[INFO], i, j = 0;
+    AP_TASK_NUMBER = 0;
+    while (!feof(fp))
+    {
+        i = 0;
+        memset(str, 0, sizeof(str));
+        fgets(str, sizeof(str) - 1, fp);
+        ptr = strtok_s(str, " ", &pTmp);
+        while (ptr != NULL) {
+            TaskInfo[i] = atoi(ptr);
+            ptr = strtok_s(NULL, " ", &pTmp);
+            /*Read for TaskSet 0:Task_ID 1:ArriveTime 2:ExecutionTime 3:Periodic */
+            if (i == 0) { AP_TASK_NUMBER++; AP_TaskParameter[j].TaskID = AP_TASK_NUMBER; }
+            else if (i == 1) AP_TaskParameter[j].TaskArriveTime = TaskInfo[i];
+            else if (i == 2) AP_TaskParameter[j].TaskExecutionTime = TaskInfo[i];
+            else if (i == 3) AP_TaskParameter[j].TaskPeriodic = TaskInfo[i];
+            i++;
+        }
+        AP_TaskParameter[j].TaskPriority = j + TASK_NUMBER;
+        j++;
+    }
+    fclose(fp);
+    //printf("%d\n", TASK_NUMBER);
 }
 //End of Huai
 /*
