@@ -132,6 +132,10 @@ void InputFile()
             else if (i == 1) TaskParameter[j].TaskArriveTime = TaskInfo[i];
             else if (i == 2) TaskParameter[j].TaskExecutionTime = TaskInfo[i];
             else if (i == 3) TaskParameter[j].TaskPeriodic = TaskInfo[i];
+            else if (i == 4) TaskParameter[j].R1Lock = TaskInfo[i];
+            else if (i == 5) TaskParameter[j].R1UnLock = TaskInfo[i];
+            else if (i == 6) TaskParameter[j].R2Lock = TaskInfo[i];
+            else if (i == 7) TaskParameter[j].R2UnLock = TaskInfo[i];
             i++;
         }
         TaskParameter[j].TaskPriority = j;

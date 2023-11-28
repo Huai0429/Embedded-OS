@@ -63,13 +63,13 @@ extern "C" {
 */
 
 // Huai
-#define SYSTEM_END_TIME 30
+#define SYSTEM_END_TIME 100
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet.txt"
+#define INPUT_FILE_NAME "./TaskSet1.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define MAX 20
-#define INFO 4
+#define INFO 8
 
 
 FILE* Output_fp;
@@ -82,10 +82,15 @@ typedef struct task_para_set {
     INT16U TaskPeriodic;
     INT16U TaskNumber;
     INT16U TaskPriority;
+    INT16U R1Lock;
+    INT16U R1UnLock;
+    INT16U R2Lock;
+    INT16U R2UnLock;
 }task_para_set;
 
 int TASK_NUMBER; //number of input task 
-
+int R1InUse;
+int R2InUse;
 OS_STK** Task_STK;
 int* TaskCtr;
 task_para_set TaskParameter[OS_MAX_TASKS];
@@ -679,6 +684,10 @@ typedef struct os_tcb {
     INT8U            StartTime;
     INT8U            EndTime;
     INT8U            ResponseTime;
+    INT8U            R1Lock;
+    INT8U            R1UnLock;
+    INT8U            R2Lock;
+    INT8U            R2UnLock;
 } OS_TCB;
 
 

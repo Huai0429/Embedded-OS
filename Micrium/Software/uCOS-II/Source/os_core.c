@@ -720,6 +720,10 @@ void  OSIntExit (void)
                             , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
                         fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur
                             , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                        /*OSTCBPrioTbl[OSPrioHighRdy]->R1Lock += OSTimeGet();
+                        OSTCBPrioTbl[OSPrioHighRdy]->R1UnLock += OSTimeGet();
+                        OSTCBPrioTbl[OSPrioHighRdy]->R2Lock += OSTimeGet();
+                        OSTCBPrioTbl[OSPrioHighRdy]->R2UnLock += OSTimeGet();*/
                     }
                     else if (OSPrioCur != 63 && OSPrioHighRdy == 63) {
                         printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
@@ -733,6 +737,10 @@ void  OSIntExit (void)
                             , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
                         fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
                             , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                       /* OSTCBPrioTbl[OSPrioHighRdy]->R1Lock += OSTimeGet();
+                        OSTCBPrioTbl[OSPrioHighRdy]->R1UnLock += OSTimeGet();
+                        OSTCBPrioTbl[OSPrioHighRdy]->R2Lock += OSTimeGet();
+                        OSTCBPrioTbl[OSPrioHighRdy]->R2UnLock += OSTimeGet();*/
                     }
                     fclose(Output_fp);
                     OSTCBCur->ResponseTime = 0;
@@ -1052,6 +1060,44 @@ void  OSTimeTick (void)
                 OSRdyGrp |= ptcb->OSTCBBitY;                        /* Make task ready to run                   */
                 OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
                 OS_TRACE_TASK_READY(ptcb);
+            }
+            if (OSTimeGet() == ptcb->R1Lock + ptcb->StartTime && !R1InUse && OSPrioCur == ptcb->OSTCBPrio) {
+                printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    fprintf(Output_fp, "%2d\tLockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fclose(Output_fp);
+                }
+                //printf("R1 Been Lock %d %d \n", R1InUse, ptcb->R1Lock);
+                //ptcb->R1Lock += ptcb->PeriodicTime;
+                R1InUse = 1;
+            }
+            if (OSTimeGet() == ptcb->R2Lock + ptcb->StartTime && !R2InUse && OSPrioCur == ptcb->OSTCBPrio) {
+                printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    fprintf(Output_fp, "%2d\tLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fclose(Output_fp);
+                }
+                //printf("R2 Been Lock %d %d \n", R2InUse, ptcb->R2Lock);
+                //ptcb->R2Lock += ptcb->PeriodicTime;
+                R2InUse = 1;
+            }
+            if (OSTimeGet() == ptcb->R1UnLock + ptcb->StartTime && R1InUse && OSPrioCur == ptcb->OSTCBPrio) {
+                printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    fprintf(Output_fp, "%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fclose(Output_fp);
+                }
+                //ptcb->R1UnLock += ptcb->PeriodicTime;
+                R1InUse = 0;
+            }
+            if (OSTimeGet() == ptcb->R2UnLock + ptcb->StartTime && R2InUse && OSPrioCur == ptcb->OSTCBPrio) {
+                printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                    fprintf(Output_fp, "%2d\tUnlockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), ptcb->OSTCBId, TaskCtr[ptcb->OSTCBPrio]);
+                    fclose(Output_fp);
+                }
+                //ptcb->R2UnLock += ptcb->PeriodicTime;
+                R2InUse = 0;
             }
             //End of huai
             if (ptcb->OSTCBDly != 0u) {                    /* No, Delayed or waiting for event with TO     */
@@ -1789,13 +1835,13 @@ void  OS_Sched (void)
                 if (OSTCBCur->ExecutionTime == OSTCBCur->reExecutionTime) {
                     if (OSPrioCur != 63 && OSPrioHighRdy == 63) {
 
-                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSPrioHighRdy, OSTCBCur->ResponseTime, OSTCBCur->ResponseTime - OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t 0\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSPrioHighRdy, OSTCBCur->ResponseTime, OSTimeGet() - OSTCBCur->StartTime- OSTCBCur->reExecutionTime);
 
                         //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
                         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                             /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur]
                                 , OSPrioHighRdy, OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
-                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(),OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSPrioHighRdy, OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t 0\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSPrioHighRdy, OSTCBCur->ResponseTime, OSTimeGet() - OSTCBCur->StartTime - OSTCBCur->reExecutionTime);
                             fclose(Output_fp);
                         }
                         OSTCBCur->ResponseTime = 0;
@@ -1818,14 +1864,14 @@ void  OS_Sched (void)
                         OSTCBCur->DelayTime = 0;
                     }
                     else {
-                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
-                        //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTimeGet() - OSTCBCur->StartTime - OSTCBCur->reExecutionTime);
+                        //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->NextReadyTime, OSTCBCur->DelayTime);
 
                         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                             /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],
                                 OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,
                                 OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
-                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId , TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,  OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
+                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->ResponseTime - OSTCBCur->reExecutionTime, OSTimeGet() - OSTCBCur->StartTime - OSTCBCur->reExecutionTime);
                             fclose(Output_fp);
                         }
                         TaskCtr[OSPrioCur]++;
@@ -1893,12 +1939,14 @@ static  void  OS_SchedNew (void)
 #if OS_LOWEST_PRIO <= 63u                        /* See if we support up to 64 tasks                   */
     INT8U   y;
 
-    
-    y             = OSUnMapTbl[OSRdyGrp];
-    OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
-    if (OSTCBPrioTbl[OSPrioCur]->Executed == 1) {
-        OSPrioHighRdy = OSPrioCur;
+    if (!R1InUse && !R2InUse) {
+        y = OSUnMapTbl[OSRdyGrp];
+        OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
+        if (OSTCBPrioTbl[OSPrioCur]->Executed == 1) {
+            OSPrioHighRdy = OSPrioCur;
+        }
     }
+    
 #else                                            /* We support up to 256 tasks                         */
     INT8U     y;
     OS_PRIO  *ptbl;
@@ -2164,7 +2212,11 @@ INT8U  OS_TCBInit (INT8U    prio,
                    INT16U   opt,
                    INT8U   ExeTime,
                    INT8U   ArrTime,
-                   INT8U   PerTime)
+                   INT8U   PerTime,
+                   INT8U R1L,
+                   INT8U R1UL,
+                   INT8U R2L,
+                   INT8U R2UL)
 {
     OS_TCB    *ptcb;
 #if OS_CRITICAL_METHOD == 3u                               /* Allocate storage for CPU status register */
@@ -2201,6 +2253,10 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->StartTime = 0;
             ptcb->EndTime = 0;
             ptcb->MissDeadline = 0;
+            ptcb->R1Lock = 0;
+            ptcb->R1UnLock = 0;
+            ptcb->R2Lock = 0;
+            ptcb->R2UnLock = 0;
         }
         else {
             ptcb->ExecutionTime = ExeTime;
@@ -2213,6 +2269,10 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->StartTime = 0;
             ptcb->EndTime = 0;
             ptcb->MissDeadline = 0;
+            ptcb->R1Lock = R1L;
+            ptcb->R1UnLock = R1UL;
+            ptcb->R2Lock = R2L;
+            ptcb->R2UnLock = R2UL;
         }
 #if OS_TASK_CREATE_EXT_EN > 0u
         ptcb->OSTCBExtPtr        = pext;                   /* Store pointer to TCB extension           */

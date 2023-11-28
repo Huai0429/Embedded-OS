@@ -118,13 +118,16 @@ int  main(void)
     InputFile();
     Task_STK = malloc(TASK_NUMBER * sizeof(int*));
     TaskCtr = calloc(TASK_NUMBER, sizeof(int));
+    R1InUse = 0;
+    R2InUse = 0;
     int n;
     for (n = 0; n < TASK_NUMBER; n++) {
         Task_STK[n] = malloc(TASK_STKSIZE * sizeof(int));
     }
     qsort(TaskParameter, TASK_NUMBER, sizeof(TaskParameter[0]), cmp);
     for (int i = 0; i < TASK_NUMBER; i++) {
-        printf("%d %d %d %d\n", TaskParameter[i].TaskID, TaskParameter[i].TaskArriveTime, TaskParameter[i].TaskExecutionTime, TaskParameter[i].TaskPeriodic);
+        printf("%d %d %d %d %d %d %d %d\n", TaskParameter[i].TaskID, TaskParameter[i].TaskArriveTime, TaskParameter[i].TaskExecutionTime, 
+            TaskParameter[i].TaskPeriodic,TaskParameter[i].R1Lock, TaskParameter[i].R1UnLock, TaskParameter[i].R2Lock, TaskParameter[i].R2UnLock);
     }
     /*TaskParameter[0].TaskPriority = 0;
     OSTaskCreateExt(task1,
@@ -167,7 +170,11 @@ int  main(void)
             (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR),
             TaskParameter[i].TaskExecutionTime,
             TaskParameter[i].TaskArriveTime,
-            TaskParameter[i].TaskPeriodic
+            TaskParameter[i].TaskPeriodic,
+            TaskParameter[i].R1Lock,
+            TaskParameter[i].R1UnLock,
+            TaskParameter[i].R2Lock,
+            TaskParameter[i].R2UnLock
         );
     }
 
@@ -182,7 +189,7 @@ int  main(void)
     }
     //next_task_pri = (OSUnMapTbl[OSRdyGrp] << 3) + OSUnMapTbl[OSRdyTbl[OSUnMapTbl[OSRdyGrp]]];
 
-    printf("Tick\tEvent\t      CurrentTask ID\tNextTask ID\t  ResponseTime\t  PreemptionTime   OSTimeDly\n");
+    printf("Tick\tEvent\t      CurrentTask ID\tNextTask ID\t  ResponseTime\t  BlockingTime \t PreemptionTime   \n");
 
     /*if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
         fclose(Output_fp);
