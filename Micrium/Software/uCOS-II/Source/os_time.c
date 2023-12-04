@@ -76,7 +76,7 @@ void  OSTimeDly (INT32U ticks)
         //if (OSRdyTbl[y] == 0u) {
         //    OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
         //}
-        OSTCBCur->Executed = 0;
+        //OSTCBCur->Executed = 0;
         if (ticks > 0) {
             y = OSTCBCur->OSTCBY;        /* Delay current task                                 */
             OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;

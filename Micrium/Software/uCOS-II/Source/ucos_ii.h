@@ -66,10 +66,10 @@ extern "C" {
 #define SYSTEM_END_TIME 100
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet1.txt"
+#define INPUT_FILE_NAME "./TaskSet2.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define MAX 20
-#define INFO 8
+#define INFO 10
 
 
 FILE* Output_fp;
@@ -95,6 +95,11 @@ OS_STK** Task_STK;
 int* TaskCtr;
 task_para_set TaskParameter[OS_MAX_TASKS];
 
+//int R1_PRIO;
+//int R2_PRIO;
+int* ResPrio;
+int* ResHeldBy;
+int ResCtr;
 void OutFileInit(void);
 void InputFile(void);
 
@@ -429,13 +434,14 @@ typedef struct os_event {
     INT16U   OSEventCnt;                    /* Semaphore Count (not used if other EVENT type)          */
     OS_PRIO  OSEventGrp;                    /* Group corresponding to tasks waiting for event to occur */
     OS_PRIO  OSEventTbl[OS_EVENT_TBL_SIZE]; /* List of tasks waiting for event to occur                */
-
+    INT8U    Prio;
 #if OS_EVENT_NAME_EN > 0u
     INT8U   *OSEventName;
 #endif
 } OS_EVENT;
 #endif
-
+OS_EVENT* R1;
+OS_EVENT* R2;
 
 /*
 *********************************************************************************************************
@@ -680,7 +686,7 @@ typedef struct os_tcb {
     INT8U            NextReadyTime;
     INT8U            DelayTime;
     INT8U            Executed;
-    INT8U            MissDeadline;
+    INT8U            PreemptionTime;
     INT8U            StartTime;
     INT8U            EndTime;
     INT8U            ResponseTime;
@@ -688,6 +694,7 @@ typedef struct os_tcb {
     INT8U            R1UnLock;
     INT8U            R2Lock;
     INT8U            R2UnLock;
+    INT8U            InheritPrio;
 } OS_TCB;
 
 

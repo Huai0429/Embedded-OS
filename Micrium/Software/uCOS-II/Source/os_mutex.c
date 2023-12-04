@@ -247,6 +247,8 @@ OS_EVENT  *OSMutexCreate (INT8U   prio,
     pevent->OSEventType = OS_EVENT_TYPE_MUTEX;
     pevent->OSEventCnt  = (INT16U)((INT16U)prio << 8u) | OS_MUTEX_AVAILABLE; /* Resource is avail.     */
     pevent->OSEventPtr  = (void *)0;                       /* No task owning the mutex                 */
+    //Huai
+    pevent->Prio = prio;
 #if OS_EVENT_NAME_EN > 0u
     pevent->OSEventName = (INT8U *)(void *)"?";
 #endif
@@ -494,7 +496,7 @@ void  OSMutexPend (OS_EVENT  *pevent,
         return;
     }
 #endif
-
+    
     OS_TRACE_MUTEX_PEND_ENTER(pevent, timeout);
 
     if (pevent->OSEventType != OS_EVENT_TYPE_MUTEX) {      /* Validate event block type                */
@@ -517,8 +519,25 @@ void  OSMutexPend (OS_EVENT  *pevent,
     pcp = (INT8U)(pevent->OSEventCnt >> 8u);               /* Get PCP from mutex                       */
                                                            /* Is Mutex available?                      */
     if ((INT8U)(pevent->OSEventCnt & OS_MUTEX_KEEP_LOWER_8) == OS_MUTEX_AVAILABLE) {
+        if (pevent->Prio == ResPrio[0]) {
+            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->InheritPrio,pcp< OSTCBCur->InheritPrio?pcp: OSTCBCur->InheritPrio);
+            if(pcp < OSTCBCur->InheritPrio)
+                OSTCBCur->InheritPrio = pcp;
+            ResHeldBy[0] = OSTCBCur->OSTCBPrio;
+        }
+        else if (pevent->Prio == ResPrio[1]) {
+            /*int prevPrio = OSTCBCur->InheritPrio;
+            if (ResHeldBy[0] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[0];
+            else OSTCBCur->InheritPrio = pcp;*/
+            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->InheritPrio, pcp < OSTCBCur->InheritPrio ? pcp : OSTCBCur->InheritPrio);
+            if (pcp < OSTCBCur->InheritPrio)
+                OSTCBCur->InheritPrio = pcp;
+            ResHeldBy[1] = OSTCBCur->OSTCBPrio;
+        }
+        //printf("Mutex Pend successful %d %d\n",OSPrioCur, pcp);
         pevent->OSEventCnt &= OS_MUTEX_KEEP_UPPER_8;       /* Yes, Acquire the resource                */
         pevent->OSEventCnt |= OSTCBCur->OSTCBPrio;         /*      Save priority of owning task        */
+        //pevent->OSEventCnt = OSTCBCur->InheritPrio;
         pevent->OSEventPtr  = (void *)OSTCBCur;            /*      Point to owning task's OS_TCB       */
         if ((pcp != OS_PRIO_MUTEX_CEIL_DIS) &&
             (OSTCBCur->OSTCBPrio <= pcp)) {                /*      PCP 'must' have a SMALLER prio ...  */
@@ -529,11 +548,14 @@ void  OSMutexPend (OS_EVENT  *pevent,
             *perr = OS_ERR_NONE;
         }
         OS_TRACE_MUTEX_PEND_EXIT(*perr);
+        //Waiting(timeout);
         return;
     }
+    //printf("%2d Tried to Lock %d\n",OSTimeGet(), pevent->Prio);
     if (pcp != OS_PRIO_MUTEX_CEIL_DIS) {
         mprio = (INT8U)(pevent->OSEventCnt & OS_MUTEX_KEEP_LOWER_8); /*  Get priority of mutex owner   */
         ptcb  = (OS_TCB *)(pevent->OSEventPtr);                   /*     Point to TCB of mutex owner   */
+        //printf("%2d Pend %d %d %d \n", OSTimeGet(),mprio, pcp, ptcb->OSTCBPrio);
         if (ptcb->OSTCBPrio > pcp) {                              /*     Need to promote prio of owner?*/
             if (mprio > OSTCBCur->OSTCBPrio) {
                 y = ptcb->OSTCBY;
@@ -667,6 +689,28 @@ INT8U  OSMutexPost (OS_EVENT *pevent)
     OS_ENTER_CRITICAL();
     pcp  = (INT8U)(pevent->OSEventCnt >> 8u);         /* Get priority ceiling priority of mutex        */
     prio = (INT8U)(pevent->OSEventCnt & OS_MUTEX_KEEP_LOWER_8);  /* Get owner's original priority      */
+    if (pevent->Prio == ResPrio[0]) {
+        int prevPrio = OSTCBCur->InheritPrio;
+        if(ResHeldBy[1] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[1];
+        else OSTCBCur->InheritPrio = prio;
+        /*for (int i = 0; i < ResCtr; i++) {
+            if (ResHeldBy[i] == OSTCBCur->OSTCBPrio && i!=0) {
+                OSTCBCur->InheritPrio = ResPrio[i];
+            }
+        }*/
+        printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], prevPrio, OSTCBCur->InheritPrio);
+        ResHeldBy[0] = 0;
+    }
+    else
+    {
+        int prevPrio = OSTCBCur->InheritPrio;
+        if (ResHeldBy[0] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[0];
+        else OSTCBCur->InheritPrio = prio;
+        printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], prevPrio,OSTCBCur->InheritPrio);
+        //OSTCBCur->InheritPrio = prio;
+        ResHeldBy[1] = 0;
+    }
+    
     if (OSTCBCur != (OS_TCB *)pevent->OSEventPtr) {   /* See if posting task owns the MUTEX            */
         OS_EXIT_CRITICAL();
         OS_TRACE_MUTEX_POST_EXIT(OS_ERR_NOT_MUTEX_OWNER);

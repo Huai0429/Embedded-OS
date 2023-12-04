@@ -1,21 +1,21 @@
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uC-CPU\cpu_core.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\cpu_core.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uC-CPU\Win32\Visual_Studio\cpu_c.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\cpu_c.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_ascii.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_ascii.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_math.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_math.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_mem.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_mem.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_str.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_str.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Ports\Win32\Visual Studio\os_cpu_c.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_cpu_c.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_core.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_dbg_r.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_dbg_r.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_flag.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_flag.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_mbox.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_mbox.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_mem.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_mem.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_mutex.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_mutex.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_q.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_q.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_sem.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_sem.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_task.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_time.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_time.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_tmr.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_tmr.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\BSP\Windows\bsp_cpu.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\bsp_cpu.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\app_hooks.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\app_hooks.obj
-C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c;C:\Users\Huai\Desktop\Embedded OS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\main.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uC-CPU\cpu_core.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\cpu_core.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uC-CPU\Win32\Visual_Studio\cpu_c.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\cpu_c.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_ascii.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_ascii.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_math.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_math.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_mem.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_mem.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uC-LIB\lib_str.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\lib_str.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Ports\Win32\Visual Studio\os_cpu_c.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_cpu_c.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_core.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_dbg_r.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_dbg_r.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_flag.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_flag.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_mbox.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_mbox.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_mem.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_mem.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_mutex.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_mutex.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_q.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_q.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_sem.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_sem.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_task.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_time.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_time.obj
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_tmr.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\os_tmr.obj
+D:\EMOS\micrium_win32_kernel\Microsoft\BSP\Windows\bsp_cpu.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\bsp_cpu.obj
+D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\app_hooks.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\app_hooks.obj
+D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c;D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\main.obj

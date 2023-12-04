@@ -102,6 +102,9 @@ int  main(void)
 #if OS_TASK_NAME_EN > 0u
     CPU_INT08U  os_err;
 #endif
+    ResCtr = 2;
+    //R1_PRIO = 63;
+    //R2_PRIO = 63;
 
 
     CPU_IntInit();
@@ -117,7 +120,11 @@ int  main(void)
 
     InputFile();
     Task_STK = malloc(TASK_NUMBER * sizeof(int*));
-    TaskCtr = calloc(TASK_NUMBER, sizeof(int));
+    TaskCtr = calloc(TASK_NUMBER*4+1, sizeof(int));
+    ResPrio = calloc(ResCtr, sizeof(int));
+    for (int i = 0; i < ResCtr; i++) ResPrio[i] = 63;
+    ResHeldBy = calloc(ResCtr, sizeof(int));
+
     R1InUse = 0;
     R2InUse = 0;
     int n;
@@ -157,8 +164,13 @@ int  main(void)
         TaskParameter[1].TaskArriveTime,
         TaskParameter[1].TaskPeriodic
     );*/
+
+
     for (int i = 0; i < TASK_NUMBER; i++) {
-        TaskParameter[i].TaskPriority = i;
+        TaskParameter[i].TaskPriority = (i + 1) * 3;
+        //TaskParameter[i].TaskPriority = i;
+        //printf("Task Prio %d \n", TaskParameter[i].TaskPriority);
+        
         OSTaskCreateExt(task1,
             &TaskParameter[i],
             &Task_STK[i][TASK_STKSIZE - 1],
@@ -177,7 +189,18 @@ int  main(void)
             TaskParameter[i].R2UnLock
         );
     }
-
+    for (int i = TASK_NUMBER - 1; i >= 0; i--) {
+        if ((TaskParameter[i].R1Lock != 0 || TaskParameter[i].R1UnLock != 0) && ResPrio[0] > TaskParameter[i].TaskPriority) {
+            ResPrio[0] = TaskParameter[i].TaskPriority - 1;
+        }
+        if ((TaskParameter[i].R2Lock != 0 || TaskParameter[i].R2UnLock != 0) && ResPrio[1] > TaskParameter[i].TaskPriority) {
+            ResPrio[1] = TaskParameter[i].TaskPriority - 2;
+        }
+    }
+    printf("Mutex Create on Prio %d %d \n", ResPrio[0], ResPrio[1]);
+    INT8U err;
+    R1 = OSMutexCreate(ResPrio[0], &err);
+    R2 = OSMutexCreate(ResPrio[1], &err);
 
 
     printf("\n================TCB linked list================\n");
@@ -213,13 +236,38 @@ static void task1(void* p_arg)
 
     task_para_set* task_data;
     task_data = p_arg;
-
+    INT8U perr;
     while (1) {
         OSTCBCur->StartTime = OSTimeGet();
         int temp = OSTimeGet();
+        OSTCBCur->Executed = 0;
         OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
         while (!OSTCBCur->Executed /*|| !OSTCBCur->MissDeadline*/) {
 
+            //ResourceBelong();
+            //if (OSTimeGet() == OSTCBCur->R1Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 && !R1InUse) {
+            //    //printf("%2d R1 lock %d %d %d\n", OSTimeGet(),OSTCBCur->R1Lock, OSTCBCur->StartTime, OSTCBCur->PreemptionTime);
+            //    /*printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]); */
+            //    //printf("%2d Lock R1 %d\n", OSTimeGet(), OSTCBCur->OSTCBId);
+            //    R1InUse = 1;
+            //    OSMutexPend(R1, OSTCBCur->R1UnLock - OSTCBCur->R1Lock, &perr);
+            //}
+            //if (OSTimeGet() == OSTCBCur->R2Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R2UnLock > 0 && !R2InUse) {
+            //    /*printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]);*/
+            //    //printf("%2d Lock R2 %d\n", OSTimeGet(), OSTCBCur->OSTCBId);
+            //    R2InUse = 1;
+            //    OSMutexPend(R2, OSTCBCur->R2UnLock - OSTCBCur->R2Lock, &perr);
+            //}
+            //if (OSTimeGet() == OSTCBCur->R1UnLock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 && R1InUse) {
+            //    /* printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]);*/
+            //    R1InUse = 0;
+            //    OSMutexPost(R1);
+            //}
+            //if (OSTimeGet() == OSTCBCur->R2UnLock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R2UnLock > 0 && R2InUse) {
+            //    /*printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]);*/
+            //    R2InUse = 0;
+            //    OSMutexPost(R2);
+            //}
         }
 
         OSTCBCur->EndTime = OSTimeGet();
