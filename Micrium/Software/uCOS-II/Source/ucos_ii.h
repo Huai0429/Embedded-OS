@@ -66,7 +66,7 @@ extern "C" {
 #define SYSTEM_END_TIME 100
 
 FILE* fp;
-#define INPUT_FILE_NAME "./TaskSet2.txt"
+#define INPUT_FILE_NAME "./TaskSet1.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define MAX 20
 #define INFO 10
@@ -687,6 +687,7 @@ typedef struct os_tcb {
     INT8U            DelayTime;
     INT8U            Executed;
     INT8U            PreemptionTime;
+    INT8U            BlockingTime;
     INT8U            StartTime;
     INT8U            EndTime;
     INT8U            ResponseTime;

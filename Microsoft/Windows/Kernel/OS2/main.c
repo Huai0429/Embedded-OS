@@ -242,6 +242,7 @@ static void task1(void* p_arg)
         int temp = OSTimeGet();
         OSTCBCur->Executed = 0;
         OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
+        //printf("%2d task %d Enter Ready Time %d\n", OSTimeGet(), OSTCBCur->OSTCBId, OSTCBCur->NextReadyTime);
         while (!OSTCBCur->Executed /*|| !OSTCBCur->MissDeadline*/) {
 
             //ResourceBelong();

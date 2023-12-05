@@ -519,19 +519,27 @@ void  OSMutexPend (OS_EVENT  *pevent,
     pcp = (INT8U)(pevent->OSEventCnt >> 8u);               /* Get PCP from mutex                       */
                                                            /* Is Mutex available?                      */
     if ((INT8U)(pevent->OSEventCnt & OS_MUTEX_KEEP_LOWER_8) == OS_MUTEX_AVAILABLE) {
+        //printf("Inherit Prio %d %d %d \n",OSTCBCur->OSTCBPrio, OSTCBCur->InheritPrio,pcp);
         if (pevent->Prio == ResPrio[0]) {
-            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->InheritPrio,pcp< OSTCBCur->InheritPrio?pcp: OSTCBCur->InheritPrio);
-            if(pcp < OSTCBCur->InheritPrio)
-                OSTCBCur->InheritPrio = pcp;
+            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio,pcp< OSTCBCur->OSTCBPrio ?pcp: OSTCBCur->OSTCBPrio);
+            if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                fprintf(Output_fp,"%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
+                fclose(Output_fp);
+            }
+            //if(pcp < OSTCBCur->InheritPrio)
+            //    OSTCBCur->InheritPrio = pcp;
             ResHeldBy[0] = OSTCBCur->OSTCBPrio;
         }
         else if (pevent->Prio == ResPrio[1]) {
             /*int prevPrio = OSTCBCur->InheritPrio;
             if (ResHeldBy[0] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[0];
             else OSTCBCur->InheritPrio = pcp;*/
-            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->InheritPrio, pcp < OSTCBCur->InheritPrio ? pcp : OSTCBCur->InheritPrio);
-            if (pcp < OSTCBCur->InheritPrio)
-                OSTCBCur->InheritPrio = pcp;
+            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
+            if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+                fprintf(Output_fp, "%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
+                fclose(Output_fp);
+            }
+
             ResHeldBy[1] = OSTCBCur->OSTCBPrio;
         }
         //printf("Mutex Pend successful %d %d\n",OSPrioCur, pcp);
@@ -548,6 +556,62 @@ void  OSMutexPend (OS_EVENT  *pevent,
             *perr = OS_ERR_NONE;
         }
         OS_TRACE_MUTEX_PEND_EXIT(*perr);
+        if (pcp < OSTCBCur->OSTCBPrio) {
+
+            ptcb = (OS_TCB*)(pevent->OSEventPtr);
+            y = ptcb->OSTCBY;
+            if ((OSRdyTbl[y] & ptcb->OSTCBBitX) != 0u) {      /*     See if mutex owner is ready   */
+                OSRdyTbl[y] &= (OS_PRIO)~ptcb->OSTCBBitX;     /*     Yes, Remove owner from Rdy ...*/
+                if (OSRdyTbl[y] == 0u) {                      /*          ... list at current prio */
+                    OSRdyGrp &= (OS_PRIO)~ptcb->OSTCBBitY;
+                }
+                rdy = OS_TRUE;
+            }
+            else {
+                pevent2 = ptcb->OSTCBEventPtr;
+                if (pevent2 != (OS_EVENT*)0) {               /* Remove from event wait list       */
+                    y = ptcb->OSTCBY;
+                    pevent2->OSEventTbl[y] &= (OS_PRIO)~ptcb->OSTCBBitX;
+                    if (pevent2->OSEventTbl[y] == 0u) {
+                        pevent2->OSEventGrp &= (OS_PRIO)~ptcb->OSTCBBitY;
+                    }
+                }
+                rdy = OS_FALSE;                        /* No                                       */
+            }
+            ptcb->OSTCBPrio = pcp;                     /* Change owner task prio to PCP            */
+
+            OS_TRACE_MUTEX_TASK_PRIO_INHERIT(ptcb, pcp);
+
+#if OS_LOWEST_PRIO <= 63u
+            ptcb->OSTCBY = (INT8U)(ptcb->OSTCBPrio >> 3u);
+            ptcb->OSTCBX = (INT8U)(ptcb->OSTCBPrio & 0x07u);
+#else
+            ptcb->OSTCBY = (INT8U)((INT8U)(ptcb->OSTCBPrio >> 4u) & 0xFFu);
+            ptcb->OSTCBX = (INT8U)(ptcb->OSTCBPrio & 0x0Fu);
+#endif
+            ptcb->OSTCBBitY = (OS_PRIO)(1uL << ptcb->OSTCBY);
+            ptcb->OSTCBBitX = (OS_PRIO)(1uL << ptcb->OSTCBX);
+
+            if (rdy == OS_TRUE) {                      /* If task was ready at owner's priority ...*/
+                OSRdyGrp |= ptcb->OSTCBBitY; /* ... make it ready at new priority.   */
+                OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
+            }
+            else {
+                pevent2 = ptcb->OSTCBEventPtr;
+                if (pevent2 != (OS_EVENT*)0) {        /* Add to event wait list                   */
+                    pevent2->OSEventGrp |= ptcb->OSTCBBitY;
+                    pevent2->OSEventTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
+                }
+            }
+            OSTCBPrioTbl[pcp] = ptcb;
+
+
+            //OSTCBCur->OSTCBPrio = pcp;
+            
+        }
+            
+        /*if (pcp < OSTCBCur->InheritPrio)
+            OSTCBCur->InheritPrio = pcp;*/
         //Waiting(timeout);
         return;
     }
@@ -689,24 +753,34 @@ INT8U  OSMutexPost (OS_EVENT *pevent)
     OS_ENTER_CRITICAL();
     pcp  = (INT8U)(pevent->OSEventCnt >> 8u);         /* Get priority ceiling priority of mutex        */
     prio = (INT8U)(pevent->OSEventCnt & OS_MUTEX_KEEP_LOWER_8);  /* Get owner's original priority      */
+    //printf("Post prio %d pcp %d %d\n", prio, pcp, OSTCBCur->OSTCBPrio);
     if (pevent->Prio == ResPrio[0]) {
-        int prevPrio = OSTCBCur->InheritPrio;
-        if(ResHeldBy[1] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[1];
-        else OSTCBCur->InheritPrio = prio;
+        //int prevPrio = OSTCBCur->InheritPrio;
+        //if(ResHeldBy[1] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[1];
+        //else OSTCBCur->InheritPrio = prio;
         /*for (int i = 0; i < ResCtr; i++) {
             if (ResHeldBy[i] == OSTCBCur->OSTCBPrio && i!=0) {
                 OSTCBCur->InheritPrio = ResPrio[i];
             }
         }*/
-        printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], prevPrio, OSTCBCur->InheritPrio);
+
+        printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+        if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+            fprintf(Output_fp, "%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+            fclose(Output_fp);
+        }
         ResHeldBy[0] = 0;
     }
     else
     {
-        int prevPrio = OSTCBCur->InheritPrio;
+        /*int prevPrio = OSTCBCur->InheritPrio;
         if (ResHeldBy[0] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[0];
-        else OSTCBCur->InheritPrio = prio;
-        printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], prevPrio,OSTCBCur->InheritPrio);
+        else OSTCBCur->InheritPrio = prio;*/
+        printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+        if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
+            fprintf(Output_fp, "%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+            fclose(Output_fp);
+        }
         //OSTCBCur->InheritPrio = prio;
         ResHeldBy[1] = 0;
     }

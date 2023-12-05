@@ -1,30 +1,47 @@
- 2	Preemption	task( 3)( 0)	task( 1)( 0)	
- 6	Completion	task( 1)( 0)	task( 3)( 0)		 4		 0		 0
-10	Preemption	task( 3)( 0)	task( 2)( 0)	
-13	Completion	task( 2)( 0)	task( 3)( 0)		 3		 0		 0
-14	Completion	task( 3)( 0)	task(63)		14		 0		 7
-17	Preemption	task(63)	task( 1)( 1)	
-21	Completion	task( 1)( 1)	task(63)		 4		 0		 0
-22	Preemption	task(63)	task( 3)( 1)	
-29	Completion	task( 3)( 1)	task(63)		 7		 0		 0
-30	Preemption	task(63)	task( 2)( 1)	
-32	Preemption	task( 2)( 1)	task( 1)( 2)	
-36	Completion	task( 1)( 2)	task( 2)( 1)		 4		 0		 0
-37	Completion	task( 2)( 1)	task(63)		 7		 0		 4
-44	Preemption	task(63)	task( 3)( 2)	
-47	Preemption	task( 3)( 2)	task( 1)( 3)	
-51	Completion	task( 1)( 3)	task( 2)( 2)		 4		 0		 0
-54	Completion	task( 2)( 2)	task( 3)( 2)		 4		 1		 0
-58	Completion	task( 3)( 2)	task(63)		14		 0		 7
-62	Preemption	task(63)	task( 1)( 4)	
-66	Completion	task( 1)( 4)	task( 3)( 3)		 4		 0		 0
-70	Preemption	task( 3)( 3)	task( 2)( 3)	
-73	Completion	task( 2)( 3)	task( 3)( 3)		 3		 0		 0
-76	Completion	task( 3)( 3)	task(63)		10		 0		 3
-77	Preemption	task(63)	task( 1)( 5)	
-81	Completion	task( 1)( 5)	task(63)		 4		 0		 0
-88	Preemption	task(63)	task( 3)( 4)	
-90	Preemption	task( 3)( 4)	task( 2)( 4)	
-92	Preemption	task( 2)( 4)	task( 1)( 6)	
-96	Completion	task( 1)( 6)	task( 2)( 4)		 4		 0		 0
-97	Completion	task( 2)( 4)	task( 3)( 4)		 7		 4		 4
+ 1	LockResource	task( 2)( 0)	 R2			 6 to 1
+ 5	LockResource	task( 2)( 0)	 R1			 1 to 1
+ 8	UnlockResource	task( 2)( 0)	 R1			 1 to 1
+ 9	UnLockResource	task( 2)( 0)	 R2			 1 to 6
+ 9	Preemption	task( 2)( 0)	task( 1)( 0)	
+11	LockResource	task( 1)( 0)	 R1			 3 to 2
+13	LockResource	task( 1)( 0)	 R2			 2 to 1
+15	UnLockResource	task( 1)( 0)	 R2			 1 to 2
+16	UnlockResource	task( 1)( 0)	 R1			 2 to 3
+17	Completion	task( 1)( 0)	task( 2)( 0)		15		 7		 0
+19	Completion	task( 2)( 0)	task(63)		19		 0		 8
+22	Preemption	task(63)	task( 1)( 1)	
+24	LockResource	task( 1)( 1)	 R1			 3 to 2
+26	LockResource	task( 1)( 0)	 R2			 2 to 1
+28	UnLockResource	task( 1)( 0)	 R2			 1 to 2
+29	UnlockResource	task( 1)( 0)	 R1			 2 to 3
+30	Completion	task( 1)( 1)	task(63)		 8		 0		 0
+40	Preemption	task(63)	task( 2)( 1)	
+41	LockResource	task( 2)( 1)	 R2			 6 to 1
+45	LockResource	task( 2)( 0)	 R1			 1 to 1
+48	UnlockResource	task( 2)( 0)	 R1			 1 to 1
+49	UnLockResource	task( 2)( 0)	 R2			 1 to 6
+49	Preemption	task( 2)( 1)	task( 1)( 2)	
+51	LockResource	task( 1)( 2)	 R1			 3 to 2
+53	LockResource	task( 1)( 0)	 R2			 2 to 1
+55	UnLockResource	task( 1)( 0)	 R2			 1 to 2
+56	UnlockResource	task( 1)( 0)	 R1			 2 to 3
+57	Completion	task( 1)( 2)	task( 2)( 1)		15		 7		 0
+59	Completion	task( 2)( 1)	task(63)		19		 0		 8
+62	Preemption	task(63)	task( 1)( 3)	
+64	LockResource	task( 1)( 3)	 R1			 3 to 2
+66	LockResource	task( 1)( 0)	 R2			 2 to 1
+68	UnLockResource	task( 1)( 0)	 R2			 1 to 2
+69	UnlockResource	task( 1)( 0)	 R1			 2 to 3
+70	Completion	task( 1)( 3)	task(63)		 8		 0		 0
+80	Preemption	task(63)	task( 2)( 2)	
+81	LockResource	task( 2)( 2)	 R2			 6 to 1
+85	LockResource	task( 2)( 0)	 R1			 1 to 1
+88	UnlockResource	task( 2)( 0)	 R1			 1 to 1
+89	UnLockResource	task( 2)( 0)	 R2			 1 to 6
+89	Preemption	task( 2)( 2)	task( 1)( 4)	
+91	LockResource	task( 1)( 4)	 R1			 3 to 2
+93	LockResource	task( 1)( 0)	 R2			 2 to 1
+95	UnLockResource	task( 1)( 0)	 R2			 1 to 2
+96	UnlockResource	task( 1)( 0)	 R1			 2 to 3
+97	Completion	task( 1)( 4)	task( 2)( 2)		15		 7		 0
+99	Completion	task( 2)( 2)	task(63)		19		 0		 8
