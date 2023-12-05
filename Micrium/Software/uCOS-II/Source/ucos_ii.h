@@ -688,6 +688,8 @@ typedef struct os_tcb {
     INT8U            R1UnLock;
     INT8U            R2Lock;
     INT8U            R2UnLock;
+    INT8U            PreemptionTime;
+    INT8U            BlockingTime;
 } OS_TCB;
 
 
