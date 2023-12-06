@@ -2,14 +2,14 @@
   os_core.c
 D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(995,9): warning C4013: 'system' 未定義; 假設 extern 傳回整數
 D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(996,9): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1044,115): warning C4018: '<': signed/unsigned 不相符
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1048,114): warning C4018: '<': signed/unsigned 不相符
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1913,18): warning C4018: '<=': signed/unsigned 不相符
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1966,11): warning C4101: 'perr': 未參考的區域變數
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2235,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2236,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2237,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2253,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1040,115): warning C4018: '<': signed/unsigned 不相符
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1044,114): warning C4018: '<': signed/unsigned 不相符
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1908,18): warning C4018: '<=': signed/unsigned 不相符
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1962,11): warning C4101: 'perr': 未參考的區域變數
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2231,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2232,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2233,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2249,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
   os_dbg_r.c
   os_flag.c
   os_mbox.c

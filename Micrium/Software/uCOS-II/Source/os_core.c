@@ -1911,6 +1911,7 @@ void Waiting (int tick )
 }
 void ResourceBelong(void)
 {
+    //printf("%2d ResourceBelong task %d R1_L %d  Start %d Preemption %d\n",OSTimeGet(), OSTCBCur->OSTCBId, OSTCBCur->R1Lock, OSTCBCur->StartTime , OSTCBCur->PreemptionTime);
     INT8U perr;
     if (OSTimeGet() == OSTCBCur->R1Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 /*&& !R1InUse*/) {
         /*printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]); */
