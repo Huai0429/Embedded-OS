@@ -1,15 +1,15 @@
 ﻿  os_cpu_c.c
   os_core.c
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(995,9): warning C4013: 'system' 未定義; 假設 extern 傳回整數
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(996,9): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1040,115): warning C4018: '<': signed/unsigned 不相符
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1044,114): warning C4018: '<': signed/unsigned 不相符
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1908,18): warning C4018: '<=': signed/unsigned 不相符
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1962,11): warning C4101: 'perr': 未參考的區域變數
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2231,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2232,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2233,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2249,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(995,9): warning C4013: 'system' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(996,9): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1040,115): warning C4018: '<': signed/unsigned 不相符
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1044,114): warning C4018: '<': signed/unsigned 不相符
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1908,18): warning C4018: '<=': signed/unsigned 不相符
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(1965,11): warning C4101: 'perr': 未參考的區域變數
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2234,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2235,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2236,12): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2252,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
   os_dbg_r.c
   os_flag.c
   os_mbox.c
@@ -18,28 +18,28 @@ D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_core.c(2249,1): 
   os_q.c
   os_sem.c
   os_task.c
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c(367,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
-D:\EMOS\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c(403,68): warning C4020: 'OS_TCBInit': 實質參數太多
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c(367,1): warning C4029: 在函式宣告和函式定義中的型式參數清單不同
+D:\EMOS\CPP\micrium_win32_kernel\Micrium\Software\uCOS-II\Source\os_task.c(403,68): warning C4020: 'OS_TCBInit': 實質參數太多
   os_time.c
   os_tmr.c
   app_hooks.c
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\app_hooks.c(128,27): warning C4013: 'atoi' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\app_hooks.c(128,27): warning C4013: 'atoi' 未定義; 假設 extern 傳回整數
   main.c
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(122,16): warning C4013: 'malloc' 未定義; 假設 extern 傳回整數
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(122,14): warning C4047: '=': 'OS_STK **' 與 'int' 間接取值的層級不同
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(123,15): warning C4013: 'calloc' 未定義; 假設 extern 傳回整數
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(123,13): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(124,13): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(126,15): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(132,21): warning C4047: '=': 'OS_STK *' 與 'int' 間接取值的層級不同
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(134,5): warning C4013: 'qsort' 未定義; 假設 extern 傳回整數
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(177,29): warning C4244: '函式': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(183,29): warning C4020: 'OSTaskCreateExt': 實質參數太多
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(210,16): warning C4477: 'printf' : 格式字串 '%11x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'os_tcb *'
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(210,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 3 的類型為 'OS_TCB *'
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(210,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 4 的類型為 'os_tcb *'
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(103,17): warning C4101: 'os_err': 未參考的區域變數
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(239,11): warning C4101: 'perr': 未參考的區域變數
-D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(294,23): warning C4013: 'abs' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(122,16): warning C4013: 'malloc' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(122,14): warning C4047: '=': 'OS_STK **' 與 'int' 間接取值的層級不同
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(123,15): warning C4013: 'calloc' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(123,13): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(124,13): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(126,15): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(132,21): warning C4047: '=': 'OS_STK *' 與 'int' 間接取值的層級不同
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(134,5): warning C4013: 'qsort' 未定義; 假設 extern 傳回整數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(177,29): warning C4244: '函式': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(183,29): warning C4020: 'OSTaskCreateExt': 實質參數太多
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(210,16): warning C4477: 'printf' : 格式字串 '%11x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'os_tcb *'
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(210,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 3 的類型為 'OS_TCB *'
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(210,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 4 的類型為 'os_tcb *'
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(103,17): warning C4101: 'os_err': 未參考的區域變數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(239,11): warning C4101: 'perr': 未參考的區域變數
+D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\main.c(294,23): warning C4013: 'abs' 未定義; 假設 extern 傳回整數
   正在產生程式碼...
-  OS2.vcxproj -> D:\EMOS\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+  OS2.vcxproj -> D:\EMOS\CPP\micrium_win32_kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

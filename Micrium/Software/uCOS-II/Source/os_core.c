@@ -1913,7 +1913,8 @@ void ResourceBelong(void)
 {
     //printf("%2d ResourceBelong task %d R1_L %d  Start %d Preemption %d\n",OSTimeGet(), OSTCBCur->OSTCBId, OSTCBCur->R1Lock, OSTCBCur->StartTime , OSTCBCur->PreemptionTime);
     INT8U perr;
-    if (OSTimeGet() == OSTCBCur->R1Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 /*&& !R1InUse*/) {
+    //if (OSTimeGet() == OSTCBCur->R1Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 /*&& !R1InUse*/) {
+    if (OSTCBCur->R1Lock == OSTCBCur->reExecutionTime - OSTCBCur->ExecutionTime && OSTCBCur->R1UnLock > 0 /*&& !R1InUse*/) {
         /*printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]); */
         //printf("%2d Lock R1 %d\n", OSTimeGet(), OSTCBCur->OSTCBId);
         R1InUse = 1;
@@ -1921,7 +1922,8 @@ void ResourceBelong(void)
         //Waiting(OSTCBCur->R1UnLock - OSTCBCur->R1Lock);
         //OSMutexPost(R1);
     }
-    if (OSTimeGet() == OSTCBCur->R2Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R2UnLock > 0 /*&& !R2InUse*/) {
+    //if (OSTimeGet() == OSTCBCur->R2Lock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R2UnLock > 0 /*&& !R2InUse*/) {
+    if (OSTCBCur->R2Lock == OSTCBCur->reExecutionTime - OSTCBCur->ExecutionTime && OSTCBCur->R2UnLock > 0 /*&& !R2InUse*/) {
         /*printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]);*/
         //printf("%2d Lock R2 %d\n", OSTimeGet(), OSTCBCur->OSTCBId);
         R2InUse = 1;
@@ -1929,12 +1931,13 @@ void ResourceBelong(void)
         //Waiting(OSTCBCur->R2UnLock - OSTCBCur->R2Lock);
         //OSMutexPost(R2);
     }
-    if (OSTimeGet() == OSTCBCur->R1UnLock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 /*&& R1InUse*/) {
+    //if (OSTimeGet() == OSTCBCur->R1UnLock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R1UnLock > 0 /*&& R1InUse*/) {
+    if (OSTCBCur->R1UnLock == OSTCBCur->reExecutionTime - OSTCBCur->ExecutionTime && OSTCBCur->R1UnLock > 0 /*&& R1InUse*/) {
         /* printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]);*/
         R1InUse = 0;
         OSMutexPost(R1);
     }
-    if (OSTimeGet() == OSTCBCur->R2UnLock + OSTCBCur->StartTime + OSTCBCur->PreemptionTime && OSTCBCur->R2UnLock > 0 /*&& R2InUse*/) {
+    if (OSTCBCur->R2UnLock == OSTCBCur->reExecutionTime - OSTCBCur->ExecutionTime && OSTCBCur->R2UnLock > 0 /*&& R2InUse*/) {
         /*printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio]);*/
         R2InUse = 0;
         OSMutexPost(R2);
