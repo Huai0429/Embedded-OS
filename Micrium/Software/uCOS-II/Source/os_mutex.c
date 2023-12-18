@@ -521,9 +521,9 @@ void  OSMutexPend (OS_EVENT  *pevent,
     if ((INT8U)(pevent->OSEventCnt & OS_MUTEX_KEEP_LOWER_8) == OS_MUTEX_AVAILABLE) {
         //printf("Inherit Prio %d %d %d \n",OSTCBCur->OSTCBPrio, OSTCBCur->InheritPrio,pcp);
         if (pevent->Prio == ResPrio[0]) {
-            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio,pcp< OSTCBCur->OSTCBPrio ?pcp: OSTCBCur->OSTCBPrio);
+            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio,pcp< OSTCBCur->OSTCBPrio ?pcp: OSTCBCur->OSTCBPrio);
             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-                fprintf(Output_fp,"%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
+                fprintf(Output_fp,"%2d\tLockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
                 fclose(Output_fp);
             }
             //if(pcp < OSTCBCur->InheritPrio)
@@ -534,9 +534,9 @@ void  OSMutexPend (OS_EVENT  *pevent,
             /*int prevPrio = OSTCBCur->InheritPrio;
             if (ResHeldBy[0] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[0];
             else OSTCBCur->InheritPrio = pcp;*/
-            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
+            printf("%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-                fprintf(Output_fp, "%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
+                fprintf(Output_fp, "%2d\tLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, pcp < OSTCBCur->OSTCBPrio ? pcp : OSTCBCur->OSTCBPrio);
                 fclose(Output_fp);
             }
 
@@ -764,9 +764,9 @@ INT8U  OSMutexPost (OS_EVENT *pevent)
             }
         }*/
 
-        printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+        printf("%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, prio);
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-            fprintf(Output_fp, "%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+            fprintf(Output_fp, "%2d\tUnlockResource\ttask(%2d)(%2d)\t R1\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, prio);
             fclose(Output_fp);
         }
         ResHeldBy[0] = 0;
@@ -776,9 +776,9 @@ INT8U  OSMutexPost (OS_EVENT *pevent)
         /*int prevPrio = OSTCBCur->InheritPrio;
         if (ResHeldBy[0] == OSTCBCur->OSTCBPrio) OSTCBCur->InheritPrio = ResPrio[0];
         else OSTCBCur->InheritPrio = prio;*/
-        printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+        printf("%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, prio);
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-            fprintf(Output_fp, "%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBPrio], OSTCBCur->OSTCBPrio, prio);
+            fprintf(Output_fp, "%2d\tUnLockResource\ttask(%2d)(%2d)\t R2\t\t\t%2d to%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBCur->OSTCBPrio, prio);
             fclose(Output_fp);
         }
         //OSTCBCur->InheritPrio = prio;

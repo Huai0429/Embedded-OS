@@ -717,23 +717,23 @@ void  OSIntExit (void)
                     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                         if (OSPrioCur == 63) {
                             printf("%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur
-                                , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                                , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId]);
                             fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur
-                                , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                                , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId]);
                         }
                         else if (OSPrioCur != 63 && OSPrioHighRdy == 63) {
-                            printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
+                            printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioCur]->OSTCBId]
                                 , OSPrioHighRdy);
-                            fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
+                            fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioCur]->OSTCBId]
                                 , OSPrioHighRdy);
 
                         }
                         else {
                             if (OSTCBPrioTbl[OSPrioCur]->OSTCBId != OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId) {
-                                printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
-                                    , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
-                                fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSPrioCur]
-                                    , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                                printf("%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioCur]->OSTCBId]
+                                    , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId]);
+                                fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioCur]->OSTCBId]
+                                    , OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId]);
                             }
                         }
                         fclose(Output_fp);
@@ -1803,13 +1803,13 @@ void  OS_Sched (void)
                 if (OSTCBCur->ExecutionTime == OSTCBCur->reExecutionTime) {
                     if (OSPrioCur != 63 && OSPrioHighRdy == 63) {
 
-                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSPrioHighRdy, OSTCBCur->ResponseTime,OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
+                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSPrioHighRdy, OSTCBCur->ResponseTime,OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
 
                         //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
                         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                             /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur]
                                 , OSPrioHighRdy, OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
-                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSPrioHighRdy, OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
+                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSPrioHighRdy, OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
                             fclose(Output_fp);
                         }
                         OSTCBCur->ResponseTime = 0;
@@ -1817,16 +1817,16 @@ void  OS_Sched (void)
                         OSTCBCur->EndTime = 0;
                         prevReadytime = 0;
                         OSTCBCur->DelayTime = 0;
-                        TaskCtr[OSPrioCur]++;
+                        TaskCtr[OSTCBCur->OSTCBId]++;
                         OSTCBCur->PreemptionTime = 0;
                         OSTCBCur->BlockingTime = 0;
                         //printf("%d %d\n", OSTimeGet(), OSTCBPrioTbl[OSPrioCur]->NextReadyTime);
 
                     }
                     else if (OSPrioCur == 63) {
-                        printf("%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur, OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                        printf("%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur, OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId]);
                         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
-                            fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur, OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy]);
+                            fprintf(Output_fp, "%2d\tPreemption\ttask(%2d)\ttask(%2d)(%2d)\t\n", OSTimeGet(), OSPrioCur, OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId]);
                             fclose(Output_fp);
                         }
                         OSTCBCur->ResponseTime = 0;
@@ -1836,17 +1836,17 @@ void  OS_Sched (void)
                         OSTCBCur->DelayTime = 0;
                     }
                     else {
-                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
+                        printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId],OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
                         //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->NextReadyTime, OSTCBCur->DelayTime);
 
                         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                             /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],
                                 OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,
                                 OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
-                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
+                            fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
                             fclose(Output_fp);
                         }
-                        TaskCtr[OSPrioCur]++;
+                        TaskCtr[OSTCBCur->OSTCBId]++;
                         OSTCBCur->ResponseTime = 0;
                         OSTCBCur->EndTime = 0;
                         prevReadytime = 0;
@@ -1855,7 +1855,7 @@ void  OS_Sched (void)
                         OSTCBCur->BlockingTime = 0;
                         OSTCBCur->StartTime = 0;
                     }
-                    OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 1) * OSTCBCur->PeriodicTime;
+                    OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSTCBCur->OSTCBId] + 1) * OSTCBCur->PeriodicTime;
                 }
                 
                 //End of Huai
@@ -1871,17 +1871,17 @@ void  OS_Sched (void)
             }
             else {
                 int prevReadytime = OSTCBCur->NextReadyTime - OSTCBCur->PeriodicTime;
-                printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
+                printf("%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime, OSTCBCur->PreemptionTime);
                 //printf("%d %d %d\n", OSTCBCur->ResponseTime, OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);
 
                 if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0) {
                     /*fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur],
                         OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime,
                         OSTCBCur->ResponseTime-OSTCBCur->reExecutionTime, OSTCBCur->DelayTime);*/
-                    fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSPrioCur], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSPrioHighRdy], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime , OSTCBCur->PreemptionTime);
+                    fprintf(Output_fp, "%2d\tCompletion\ttask(%2d)(%2d)\ttask(%2d)(%2d)\t\t%2d\t\t%2d\t\t%2d\n", OSTimeGet(), OSTCBCur->OSTCBId, TaskCtr[OSTCBCur->OSTCBId], OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TaskCtr[OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId], OSTCBCur->ResponseTime, OSTCBCur->BlockingTime , OSTCBCur->PreemptionTime);
                     fclose(Output_fp);
                 }
-                TaskCtr[OSPrioCur]++;
+                TaskCtr[OSTCBCur->OSTCBId]++;
                 OSTCBCur->ResponseTime = 0;
                 OSTCBCur->EndTime = 0;
                 prevReadytime = 0;

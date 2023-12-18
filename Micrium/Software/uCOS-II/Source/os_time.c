@@ -87,7 +87,7 @@ void  OSTimeDly (INT32U ticks)
 
         }
         else {
-            OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSPrioCur] + 2) * OSTCBCur->PeriodicTime;
+            OSTCBCur->NextReadyTime = OSTCBCur->ArrivesTime + (TaskCtr[OSTCBCur->OSTCBId] + 2) * OSTCBCur->PeriodicTime;
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_TRACE_TASK_DLY(ticks);
